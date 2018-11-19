@@ -1,0 +1,9 @@
+This unit converter is a python application built using Tkinter GUI.
+
+The purpose of this application is to display typical units of pressure, temperature, length, and others that a mechanical engineer would typically use.
+
+Initial screen: multiple choice of "pressure, temperature... etc"
+Based on application, updates screen with those common (hard-coded) unit systems.
+
+Eg: pressure includes psi, MPa, Pa, and maybe others such as Torr (settings to add/remove these)
+If any box is filled with a value, the other boxes calculate the other units.
