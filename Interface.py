@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import font  as tkfont
 from tkinter import PhotoImage
-
+from data import Unit
 
 
 class SampleApp(tk.Tk):
@@ -76,10 +76,34 @@ class PressurePage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="This is Pressure", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
+        label.grid(rows = 1, columns=1)
+
+        psi = Unit()
+        mpa = Unit()
+
+        psi.value = 505S
+
+        auto_fill = tk.StringVar(self, value = psi.value)
+
+        psi_frame = tk.Entry(self, textvariable = auto_fill)
+        psi_frame.grid(rows = 1, columns = 2)
+        frame1 = tk.Label(self, text="psi")
+        frame1.grid(rows = 1, columns = 3)
+
+        mpa.value = tk.StringVar(self, psi.value * 0.00689476)
+
+        mpa_frame = tk.Entry(self, textvariable = mpa.value)
+        mpa_frame.grid(rows = 1, columns = 2)
+        frame2 = tk.Label(self, text = 'MPa')
+        frame2.grid(rows = 1, columns = 3)
+   
+        
+
+
+        exit = tk.Button(self, text="Go to the start page",
                            command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+        exit.grid(rows = 3, columns = 1)
+
 
 
 class SpeedPage(tk.Frame):
