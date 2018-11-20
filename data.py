@@ -1,7 +1,2 @@
-class Unit:
-    value = 0
-    conversion_rate = 0
-    name = "name"
-
-    def convert(self, rate):
-        value = value * conversion_rate
+class Rate:
+    psi_to_mpa = 0.00689476

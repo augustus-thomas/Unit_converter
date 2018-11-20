@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import font  as tkfont
 from tkinter import PhotoImage
-from data import Unit
+from data import Rate
+from methods import Methods, Unit
 
 
 class SampleApp(tk.Tk):
@@ -78,31 +79,50 @@ class PressurePage(tk.Frame):
         label = tk.Label(self, text="This is Pressure", font=controller.title_font)
         label.grid(rows = 1, columns=1)
 
+        #initialize objects
         psi = Unit()
         mpa = Unit()
 
-        psi.value = 505
+        calc_method = Methods()
 
-        auto_fill = tk.StringVar(self, value = psi.value)
 
-        psi_frame = tk.Entry(self, textvariable = auto_fill)
+        #auto_fill = tk.StringVar(self, value = 0)
+
+        #add the psi entry and unit
+        psi_frame = tk.Entry(self)
         psi_frame.grid(rows = 1, columns = 2)
         frame1 = tk.Label(self, text="psi")
         frame1.grid(rows = 1, columns = 3)
 
-        mpa.value = tk.StringVar(self, psi.value * 0.00689476)
-
+        #add the mpa entry and unit
         mpa_frame = tk.Entry(self, textvariable = mpa.value)
         mpa_frame.grid(rows = 1, columns = 2)
         frame2 = tk.Label(self, text = 'MPa')
         frame2.grid(rows = 1, columns = 3)
-   
         
+        #add the calculate button
+        calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: self.reader(psi_frame, mpa_frame, psi, mpa))
+        calc_button.grid(rows=5, columns=1)
 
+        #add the "back to main menu button"
+        exit = tk.Button(self, text="Go to the main menu", command=lambda: controller.show_frame("StartPage"))
+        exit.grid(rows=3, columns=1)
 
-        exit = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("StartPage"))
-        exit.grid(rows = 3, columns = 1)
+        #add the "clear all" button
+        clear = tk.Button(self, text="Clear", command=lambda: self.clear_all(psi_frame, mpa_frame))
+        clear.grid(rows=3, columns=2)
+
+    #Reads the entry, performs conversion, places result in output box (move to methods?)
+    def reader(self, input, output, in_unit, out_unit):
+        out_unit.value = round( float(input.get()) * in_unit.conversion_rate , 2)
+        #round(out_unit.value, 2)
+        output.delete(0, 'end')
+        output.insert(0,out_unit.value)
+
+    #Clears all boxes using for loop (move to methods?)
+    def clear_all(self, frame1, frame2):
+        frame1.delete(0, 'end')
+        frame2.delete(0, 'end')
 
 
 
