@@ -85,9 +85,6 @@ class PressurePage(tk.Frame):
 
         calc_method = Methods()
 
-
-        #auto_fill = tk.StringVar(self, value = 0)
-
         #add the psi entry and unit
         psi_frame = tk.Entry(self)
         psi_frame.grid(rows = 1, columns = 2)
@@ -100,6 +97,12 @@ class PressurePage(tk.Frame):
         frame2 = tk.Label(self, text = 'MPa')
         frame2.grid(rows = 1, columns = 3)
         
+        #create an array to hold frames for clearing
+        frames_array = {
+            psi_frame,
+            mpa_frame
+            }
+
         #add the calculate button
         calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: self.reader(psi_frame, mpa_frame, psi, mpa))
         calc_button.grid(rows=5, columns=1)
@@ -109,8 +112,10 @@ class PressurePage(tk.Frame):
         exit.grid(rows=3, columns=1)
 
         #add the "clear all" button
-        clear = tk.Button(self, text="Clear", command=lambda: self.clear_all(psi_frame, mpa_frame))
+        clear = tk.Button(self, text="Clear", command=lambda: self.clear_all(frames_array))
         clear.grid(rows=3, columns=2)
+
+
 
     #Reads the entry, performs conversion, places result in output box (move to methods?)
     def reader(self, input, output, in_unit, out_unit):
@@ -120,10 +125,9 @@ class PressurePage(tk.Frame):
         output.insert(0,out_unit.value)
 
     #Clears all boxes using for loop (move to methods?)
-    def clear_all(self, frame1, frame2):
-        frame1.delete(0, 'end')
-        frame2.delete(0, 'end')
-
+    def clear_all(self, array):
+        for frames in array:
+            frames.delete(0, 'end')
 
 
 class SpeedPage(tk.Frame):
