@@ -79,6 +79,9 @@ class PressurePage(tk.Frame):
         label = tk.Label(self, text="This is Pressure", font=controller.title_font)
         label.grid(rows = 1, columns=1)
 
+        #create a list to hold frames for clearing
+        frames_array = list()
+
         #initialize objects
         psi = Unit()
         mpa = Unit()
@@ -90,18 +93,15 @@ class PressurePage(tk.Frame):
         psi_frame.grid(rows = 1, columns = 2)
         frame1 = tk.Label(self, text="psi")
         frame1.grid(rows = 1, columns = 3)
+        frames_array.append(psi_frame)
 
         #add the mpa entry and unit
         mpa_frame = tk.Entry(self, textvariable = mpa.value)
         mpa_frame.grid(rows = 1, columns = 2)
         frame2 = tk.Label(self, text = 'MPa')
         frame2.grid(rows = 1, columns = 3)
-        
-        #create an array to hold frames for clearing
-        frames_array = {
-            psi_frame,
-            mpa_frame
-            }
+        frames_array.append(mpa_frame)
+
 
         #add the calculate button
         calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: self.reader(psi_frame, mpa_frame, psi, mpa))
