@@ -81,7 +81,7 @@ class PressurePage(tk.Frame):
         psi = Unit()
         mpa = Unit()
 
-        psi.value = 505S
+        psi.value = 505
 
         auto_fill = tk.StringVar(self, value = psi.value)
 
