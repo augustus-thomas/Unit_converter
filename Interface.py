@@ -93,17 +93,17 @@ class PressurePage(tk.Frame):
         psi.frame.grid(rows = 1, columns = 2)
         frame1 = tk.Label(self, text="psi")
         frame1.grid(rows = 1, columns = 3)
-        units_array.append(psi.frame)
+        units_array.append(psi)
 
         #add the mpa entry and unit
         mpa.frame = tk.Entry(self, textvariable = mpa.value)
         mpa.frame.grid(rows = 1, columns = 2)
         frame2 = tk.Label(self, text = 'MPa')
         frame2.grid(rows = 1, columns = 3)
-        units_array.append(mpa.frame)
+        units_array.append(mpa)
 
         #add the calculate button
-        calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: self.reader(psi, mpa))
+        calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: self.reader(units_array))
         calc_button.grid(rows=5, columns=1)
 
         #add the "back to main menu button"
@@ -117,16 +117,32 @@ class PressurePage(tk.Frame):
 
 
     #Reads the entry, performs conversion, places result in output box (move to methods?)
-    def reader(self, psi, mpa):
-        mpa.value = float(psi.frame.get()) * psi.conversion_rate
-        round(mpa.value, 5)
-        mpa.frame.delete(0, 'end')
-        mpa.frame.insert(0,mpa.value)
+    def reader(self, list):
+        i=0
+        #cycle through entries looking for non-zero values. Save those values
+        for objects in list:
+            if objects.frame.get() != 0:
+                master_val = objects.frame.get()
+                master_location = i
+                break
+        i+=1 
+
+        for objects in list:
+            if objects.frame.get() == master_val:
+                continue
+                #if this is the input, skip the loop step
+
+            #hard-coded conversion rate for testing
+            objects.value = float(master_val)*0.05
+            #clear the box before appending the value
+            objects.frame.delete(0,'end')
+            #Round the value and insert into the box
+            objects.frame.insert(0, round(objects.value))
 
     #Clears all boxes using for loop (move to methods?)
     def clear_all(self, list):
         for frames in list:
-            frames.delete(0, 'end')
+            frames.frame.delete(0, 'end')
 
 
 class SpeedPage(tk.Frame):
