@@ -2,6 +2,7 @@ class Unit:
     value = 0
     conversion_rate = 0.05
     name = "name"
+    frame = 0
 
     def convert(self, rate):
         value = value * conversion_rate

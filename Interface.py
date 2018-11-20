@@ -80,7 +80,7 @@ class PressurePage(tk.Frame):
         label.grid(rows = 1, columns=1)
 
         #create a list to hold frames for clearing
-        frames_array = list()
+        units_array = list()
 
         #initialize objects
         psi = Unit()
@@ -89,22 +89,21 @@ class PressurePage(tk.Frame):
         calc_method = Methods()
 
         #add the psi entry and unit
-        psi_frame = tk.Entry(self)
-        psi_frame.grid(rows = 1, columns = 2)
+        psi.frame = tk.Entry(self)
+        psi.frame.grid(rows = 1, columns = 2)
         frame1 = tk.Label(self, text="psi")
         frame1.grid(rows = 1, columns = 3)
-        frames_array.append(psi_frame)
+        units_array.append(psi.frame)
 
         #add the mpa entry and unit
-        mpa_frame = tk.Entry(self, textvariable = mpa.value)
-        mpa_frame.grid(rows = 1, columns = 2)
+        mpa.frame = tk.Entry(self, textvariable = mpa.value)
+        mpa.frame.grid(rows = 1, columns = 2)
         frame2 = tk.Label(self, text = 'MPa')
         frame2.grid(rows = 1, columns = 3)
-        frames_array.append(mpa_frame)
-
+        units_array.append(mpa.frame)
 
         #add the calculate button
-        calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: self.reader(psi_frame, mpa_frame, psi, mpa))
+        calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: self.reader(psi, mpa))
         calc_button.grid(rows=5, columns=1)
 
         #add the "back to main menu button"
@@ -112,21 +111,21 @@ class PressurePage(tk.Frame):
         exit.grid(rows=3, columns=1)
 
         #add the "clear all" button
-        clear = tk.Button(self, text="Clear", command=lambda: self.clear_all(frames_array))
+        clear = tk.Button(self, text="Clear", command=lambda: self.clear_all(units_array))
         clear.grid(rows=3, columns=2)
 
 
 
     #Reads the entry, performs conversion, places result in output box (move to methods?)
-    def reader(self, input, output, in_unit, out_unit):
-        out_unit.value = round( float(input.get()) * in_unit.conversion_rate , 2)
-        #round(out_unit.value, 2)
-        output.delete(0, 'end')
-        output.insert(0,out_unit.value)
+    def reader(self, psi, mpa):
+        mpa.value = float(psi.frame.get()) * psi.conversion_rate
+        round(mpa.value, 5)
+        mpa.frame.delete(0, 'end')
+        mpa.frame.insert(0,mpa.value)
 
     #Clears all boxes using for loop (move to methods?)
-    def clear_all(self, array):
-        for frames in array:
+    def clear_all(self, list):
+        for frames in list:
             frames.delete(0, 'end')
 
 
