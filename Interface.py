@@ -13,6 +13,7 @@ class SampleApp(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
+        self.button_font = tkfont.Font(family='Helvetica', size=12, weight="bold", slant="italic")
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -74,10 +75,15 @@ class StartPage(tk.Frame):
 class PressurePage(tk.Frame):
 
     def __init__(self, parent, controller):
+
+        #display label
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="This is Pressure", font=controller.title_font)
-        label.grid(rows = 1, columns=1)
+        label.grid(row = 0, column = 0)
+
+        #instantiating a Methods class
+        calculator = Methods()
 
         #create a list to hold frames for clearing
         units_array = list()
@@ -88,37 +94,36 @@ class PressurePage(tk.Frame):
 
         #add the psi entry and unit
         psi.frame = tk.Entry(self)
-        psi.frame.grid(rows = 1, columns = 2)
-        frame1 = tk.Label(self, text="psi")
-        frame1.grid(rows = 1, columns = 3)
+        psi.frame.grid(row=1, column = 0)
+        frame1 = tk.Label(self, text="psi", font=controller.button_font)
+        frame1.grid(row=1, column = 1)
         units_array.append(psi)
 
         #add the mpa entry and unit
         mpa.frame = tk.Entry(self, textvariable = mpa.value)
-        mpa.frame.grid(rows = 1, columns = 2)
-        frame2 = tk.Label(self, text = 'MPa')
-        frame2.grid(rows = 1, columns = 3)
+        mpa.frame.grid(row=2, column = 0)
+        frame2 = tk.Label(self, text = 'MPa', font=controller.button_font)
+        frame2.grid(row=2, column = 1)
         units_array.append(mpa)
 
+        #add the "clear all" button
+        clear = tk.Button(self, text="Clear", font = controller.button_font, command=lambda: calculator.clear_all(units_array))
+        clear.grid(row=4, column = 0)
+
         #add the calculate button
-        calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: Methods.reader(units_array))
-        calc_button.grid(rows=5, columns=1)
+        calc_button = tk.Button(self, text = "Calculate", font = controller.button_font, command = lambda: calculator.reader(units_array))
+        calc_button.grid(row=3, column = 0)
 
         #add the "back to main menu button"
-        exit = tk.Button(self, text="Go to the main menu", command=lambda: controller.show_frame("StartPage"))
-        exit.grid(rows=3, columns=1)
+        exit = tk.Button(self, text="Go to the main menu", font = controller.title_font, command=lambda: controller.show_frame("StartPage"))
+        exit.grid(row=5)
 
-        #add the "clear all" button
-        clear = tk.Button(self, text="Clear", command=lambda: self.clear_all(units_array))
-        clear.grid(rows=3, columns=2)
+
 
 
 
  
-    #Clears all boxes using for loop (move to methods?)
-    def clear_all(self, list):
-        for frames in list:
-            frames.frame.delete(0, 'end')
+
 
 
 class SpeedPage(tk.Frame):
