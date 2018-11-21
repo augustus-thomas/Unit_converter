@@ -86,8 +86,6 @@ class PressurePage(tk.Frame):
         psi = Unit()
         mpa = Unit()
 
-        calc_method = Methods()
-
         #add the psi entry and unit
         psi.frame = tk.Entry(self)
         psi.frame.grid(rows = 1, columns = 2)
@@ -103,7 +101,7 @@ class PressurePage(tk.Frame):
         units_array.append(mpa)
 
         #add the calculate button
-        calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: self.reader(units_array))
+        calc_button = tk.Button(self, text = "Calculate", font = controller.title_font, command = lambda: Methods.reader(units_array))
         calc_button.grid(rows=5, columns=1)
 
         #add the "back to main menu button"
@@ -116,29 +114,7 @@ class PressurePage(tk.Frame):
 
 
 
-    #Reads the entry, performs conversion, places result in output box (move to methods?)
-    def reader(self, list):
-        i=0
-        #cycle through entries looking for non-zero values. Save those values
-        for objects in list:
-            if objects.frame.get() != 0:
-                master_val = objects.frame.get()
-                master_location = i
-                break
-        i+=1 
-
-        for objects in list:
-            if objects.frame.get() == master_val:
-                continue
-                #if this is the input, skip the loop step
-
-            #hard-coded conversion rate for testing
-            objects.value = float(master_val)*0.05
-            #clear the box before appending the value
-            objects.frame.delete(0,'end')
-            #Round the value and insert into the box
-            objects.frame.insert(0, round(objects.value))
-
+ 
     #Clears all boxes using for loop (move to methods?)
     def clear_all(self, list):
         for frames in list:
