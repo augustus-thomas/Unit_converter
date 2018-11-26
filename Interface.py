@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import font  as tkfont
 from tkinter import PhotoImage
-from data import Rate
+import data
 from methods import Methods, Unit
 
 
@@ -88,9 +88,16 @@ class PressurePage(tk.Frame):
         #create a list to hold frames for clearing
         units_array = list()
 
-        #initialize objects
+        #initialize objects and conversion rates
         psi = Unit()
         mpa = Unit()
+        torr = Unit()
+
+        #grab conversion rates from data file
+        psi.conversion_rate = data.psi_to_psi
+        mpa.conversion_rate= data.mpa_to_psi
+        torr.conversion_rate= data.torr_to_psi
+
 
         #add the psi entry and unit
         psi.frame = tk.Entry(self)
@@ -100,23 +107,30 @@ class PressurePage(tk.Frame):
         units_array.append(psi)
 
         #add the mpa entry and unit
-        mpa.frame = tk.Entry(self, textvariable = mpa.value)
+        mpa.frame = tk.Entry(self)
         mpa.frame.grid(row=2, column = 0)
         frame2 = tk.Label(self, text = 'MPa', font=controller.button_font)
         frame2.grid(row=2, column = 1)
         units_array.append(mpa)
 
+        #add the torr entry and unit
+        torr.frame = tk.Entry(self)
+        torr.frame.grid(row=3, column = 0)
+        frame2 = tk.Label(self, text = 'Torr', font=controller.button_font)
+        frame2.grid(row=3, column = 1)
+        units_array.append(torr)
+
         #add the "clear all" button
         clear = tk.Button(self, text="Clear", font = controller.button_font, command=lambda: calculator.clear_all(units_array))
-        clear.grid(row=4, column = 0)
+        clear.grid(row=5, column = 0)
 
         #add the calculate button
         calc_button = tk.Button(self, text = "Calculate", font = controller.button_font, command = lambda: calculator.reader(units_array))
-        calc_button.grid(row=3, column = 0)
+        calc_button.grid(row=4, column = 0)
 
         #add the "back to main menu button"
         exit = tk.Button(self, text="Go to the main menu", font = controller.title_font, command=lambda: controller.show_frame("StartPage"))
-        exit.grid(row=5)
+        exit.grid(row=6)
 
 
 

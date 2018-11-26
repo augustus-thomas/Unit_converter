@@ -1,5 +1,3 @@
-import decimal
-
 class Unit:
     value = 0
     conversion_rate = 0.05
@@ -15,27 +13,39 @@ class Methods:
    #Reads the entry, performs conversion, places result in output box (move to methods?)
     def reader(self, units_list):
 
-        #cycle through entries looking for a non-zero value. Save that value and location
-        for objects in units_list:
-            #Only read non-empty tk.entry objects
-            if objects.frame.index("end") != 0:
-                master_val = float(objects.frame.get())
-                objects.value = master_val
-                break
+        #Grab psi.value if it is available
+        if units_list[0].frame.index("end") != 0:
+            master_val = float(units_list[0].frame.get())
+            units_list[0].value = master_val
 
+        #Search for what they did enter and get psi.value
+        if units_list[0].frame.index("end") == 0:
+            #cycle through entries looking for which was entered
+            for objects in units_list:
+                #Only read non-empty tk.entry objects
+                if objects.frame.index("end") != 0:
+                    master_val = float(objects.frame.get())
+                    #caluclate psi from whatever was entered
+                    units_list[0].value = master_val*objects.conversion_rate
+                    break  
+                    
+        #calculate all other unit values from psi.value
         for objects in units_list:
+            #do not edit the user-entered value
             if objects.value == master_val:
                 continue
-                #if this is the input, skip the loop step
+            objects.value = round(units_list[0].value/objects.conversion_rate, len(str(abs(master_val)))-2 )
 
-            #Round the conversion to the current sig-figs
-            decimal.Decimal.localcontext.prec()=len(str(abs(master_val)))
-            #hard-coded a .05 conversion rate for test
-            objects.value = decimal.Decimal(master_val*objects.conversion_rate)
+        #print converted values to respective boxes
+        for objects in units_list:
+            #do not edit the user-entered value
+            if objects.value == master_val:
+                continue
             #clear the box to avoid appending an existing value
             objects.frame.delete(0,'end')
-            #insert the value into the entry box
+            #insert the Unit().value into the Unit().entry-box
             objects.frame.insert(0, objects.value)
+
 
     #Clears all boxes using for loop (move to methods?)
     def clear_all(self, units_list):
