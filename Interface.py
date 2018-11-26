@@ -5,6 +5,7 @@ import data
 from methods import Methods, Unit
 
 
+
 class SampleApp(tk.Tk):
 
     photo = "ESP_logo.png"
@@ -125,11 +126,13 @@ class PressurePage(tk.Frame):
         clear.grid(row=5, column = 0)
 
         #add the calculate button
-        calc_button = tk.Button(self, text = "Calculate", font = controller.button_font, command = lambda: calculator.reader(units_array))
+        calc_button = tk.Button(self, text = "Calculate", font = controller.button_font,
+                                command = lambda: calculator.reader(units_array))
         calc_button.grid(row=4, column = 0)
 
         #add the "back to main menu button"
-        exit = tk.Button(self, text="Go to the main menu", font = controller.title_font, command=lambda: controller.show_frame("StartPage"))
+        exit = tk.Button(self, text="Go to the main menu", font = controller.title_font, 
+                         command=lambda: controller.show_frame("StartPage"))
         exit.grid(row=6)
 
 
@@ -167,13 +170,87 @@ class LengthPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is Length", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+        label = tk.Label(self, text="Length Conversion Tool", font=controller.title_font)
+        label.grid(row = 0, column = 0, columnspan = 4)
+        label.grid_columnconfigure(1, weight = 1)
 
+        #instantiating a Methods class
+        calculator = Methods()
 
+        #create a list to hold frames for clearing
+        units_array = list()
+
+        #initialize objects and conversion rates
+        meter = Unit()
+        cm = Unit()
+        mm = Unit()
+        thou = Unit()
+        inch = Unit()
+        mile = Unit()
+
+        #grab conversion rates from data file
+        meter.conversion_rate = data.m_to_m
+        cm.conversion_rate= data.cm_to_m
+        mm.conversion_rate= data.mm_to_m
+        thou.conversion_rate= data.thou_to_m
+        inch.conversion_rate= data.inch_to_m
+        mile.conversion_rate= data.mile_to_m
+
+        #add the meter entry and unit
+        meter.frame = tk.Entry(self)
+        meter.frame.grid(row=1, column = 1, sticky = tk.E)
+        frame1 = tk.Label(self, text="meter", font=controller.button_font)
+        frame1.grid(row=1, column = 2, sticky = tk.W)
+        units_array.append(meter)
+
+        #add the centimeter entry and unit
+        cm.frame = tk.Entry(self)
+        cm.frame.grid(row=2, column = 1, sticky = tk.E)
+        frame1 = tk.Label(self, text="cm", font=controller.button_font)
+        frame1.grid(row=2, column = 2, sticky = tk.W)
+        units_array.append(cm)
+
+        #add the millimeter entry and unit
+        mm.frame = tk.Entry(self)
+        mm.frame.grid(row=3, column = 1, sticky = tk.E)
+        frame1 = tk.Label(self, text="mm", font=controller.button_font)
+        frame1.grid(row=3, column = 2, sticky = tk.W)
+        units_array.append(mm)
+
+        #add the thousandth entry and unit
+        thou.frame = tk.Entry(self)
+        thou.frame.grid(row=4, column = 1, sticky = tk.E)
+        frame1 = tk.Label(self, text="thousandths of an inch", font=controller.button_font)
+        frame1.grid(row=4, column = 2, sticky = tk.W)
+        units_array.append(thou)
+
+        #add the inch entry and unit
+        inch.frame = tk.Entry(self)
+        inch.frame.grid(row=5, column = 1, sticky = tk.E)
+        frame1 = tk.Label(self, text="inch", font=controller.button_font)
+        frame1.grid(row=5, column = 2, sticky = tk.W)
+        units_array.append(inch)
+        
+        #add the mile entry and unit
+        mile.frame = tk.Entry(self)
+        mile.frame.grid(row=6, column = 1, sticky = tk.E)
+        frame1 = tk.Label(self, text="mile", font=controller.button_font)
+        frame1.grid(row=6, column = 2, sticky = tk.W)
+        units_array.append(mile)
+
+        #add the calculate button
+        calc_button = tk.Button(self, text = "Calculate", font = controller.button_font,
+                                command = lambda: calculator.reader(units_array))
+        calc_button.grid(row=8, column = 1, padx=2)
+
+        #add the "clear all" button
+        clear = tk.Button(self, text="Clear", font = controller.button_font, command=lambda: calculator.clear_all(units_array))
+        clear.grid(row=9, column = 1)
+
+        #add the "back to main menu button"
+        exit = tk.Button(self, text="Go to the main menu", font = controller.title_font,
+                         command=lambda: controller.show_frame("StartPage"))
+        exit.grid(row=10, column =1)
 
 if __name__ == "__main__":
     app = SampleApp()
