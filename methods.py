@@ -1,4 +1,5 @@
 from decimal import *
+import re  
 
 class Unit:
     value = 0
@@ -20,9 +21,10 @@ class Methods:
             master_val = float(units_list[0].frame.get())
             units_list[0].value = master_val
 
-            #set precision to length of entry string (NOT TRUE SIG FIGS)
-            context = Context(prec = len(units_list[0].frame.get()), rounding = ROUND_UP)
+            #set precision to length of entry string
+            context = Context(prec = self.find_sigfigs(units_list[0].frame.get()), rounding = ROUND_UP)
             setcontext(context)
+            ##print(self.find_sigfigs(units_list[0].frame.get()))
 
         #Search for what they did enter and get psi.value
         if units_list[0].frame.index("end") == 0:
@@ -30,24 +32,20 @@ class Methods:
             for objects in units_list:
                 #Only read non-empty tk.entry objects
                 if objects.frame.index("end") != 0:
-
-                    #grab the entered value
+                    #grab the entered value and set its objects.value to that (avoids rounding later on)
                     master_val = float(objects.frame.get())
-
-                    #set precision to length of entry string (NOT TRUE SIG FIGS)
-                    context = Context(prec = len(objects.frame.get()), rounding = ROUND_UP)
+                    objects.value = master_val
+                    #set precision to the number of sigfigs entered
+                    context = Context(prec = self.find_sigfigs(objects.frame.get()), rounding = ROUND_UP)
                     setcontext(context)
-
                     #caluclate psi from whatever was entered
                     units_list[0].value = Decimal(master_val*objects.conversion_rate)
-                    break
-                    
+                    break    
         #calculate all other unit values from psi.value
         for objects in units_list:
             #do not edit the user-entered value
             if objects.value == master_val:
                 continue
-            #print(context)
             objects.value = Decimal(units_list[0].value)/Decimal(objects.conversion_rate)
 
         #print converted values to respective boxes
@@ -65,3 +63,28 @@ class Methods:
     def clear_all(self, units_list):
         for frames in units_list:
             frames.frame.delete(0, 'end')
+
+    '''Returns the number of sig figs found in a number'''
+    def find_sigfigs(self, num):
+        #if sci-notation is used, drop to lowercase
+        num = num.lower()
+        if ('e' in num):
+            #in sci-notation, the sig figs appear on the left of the e
+            myStr = num.split('e')
+            return len( myStr[0] ) - 1 # to compenstate for the decimal point
+        else:
+            #make a copy of the string with added sig figs in e notation, then strip the e.
+            n = ('%.*e' %(8, float(num))).split('e')
+            if '.' in num:
+                #create a copy with no decimals
+                s = num.replace('.','')
+                #number of zeros to add back in
+                l = len(s) - len(s.rstrip('0'))
+                #take all zeros off the copy.
+                #Add on all the zeros supposed to be there?
+                n[0] = n[0].rstrip('0') + ''.join(['0' for num in range(l)])
+            else:
+                #the user had no trailing zeros so just strip them all
+                n[0] = n[0].rstrip('0')
+            #pass back to the beginning to parse
+        return self.find_sigfigs('e'.join(n))
