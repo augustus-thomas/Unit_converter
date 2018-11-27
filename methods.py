@@ -1,3 +1,5 @@
+from decimal import *
+
 class Unit:
     value = 0
     conversion_rate = 0.05
@@ -18,23 +20,35 @@ class Methods:
             master_val = float(units_list[0].frame.get())
             units_list[0].value = master_val
 
+            #set precision to length of entry string (NOT TRUE SIG FIGS)
+            context = Context(prec = len(units_list[0].frame.get()), rounding = ROUND_UP)
+            setcontext(context)
+
         #Search for what they did enter and get psi.value
         if units_list[0].frame.index("end") == 0:
             #cycle through entries looking for which was entered
             for objects in units_list:
                 #Only read non-empty tk.entry objects
                 if objects.frame.index("end") != 0:
+
+                    #grab the entered value
                     master_val = float(objects.frame.get())
+
+                    #set precision to length of entry string (NOT TRUE SIG FIGS)
+                    context = Context(prec = len(objects.frame.get()), rounding = ROUND_UP)
+                    setcontext(context)
+
                     #caluclate psi from whatever was entered
-                    units_list[0].value = master_val*objects.conversion_rate
-                    break  
+                    units_list[0].value = Decimal(master_val*objects.conversion_rate)
+                    break
                     
         #calculate all other unit values from psi.value
         for objects in units_list:
             #do not edit the user-entered value
             if objects.value == master_val:
                 continue
-            objects.value = round(units_list[0].value/objects.conversion_rate, len(str(abs(master_val)))-2 )
+            #print(context)
+            objects.value = Decimal(units_list[0].value)/Decimal(objects.conversion_rate)
 
         #print converted values to respective boxes
         for objects in units_list:
