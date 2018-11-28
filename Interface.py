@@ -158,6 +158,7 @@ class SpeedPage(tk.Frame):
         calculator = Methods()
 
         #inititalize list of variables
+        units_list = list() #holds all objects for clearing purposes
         rates_list = list()
         diameters_list = list()
         velocity_list = list()
@@ -173,8 +174,8 @@ class SpeedPage(tk.Frame):
         #grab conversion rates from data file]
         rps.conversion_rate = data.rps_to_rpm
         rpm.conversion_rate = 1 #RPM is master rotational speed unit
-        mm.conversion_rate = data.mm_to_inch
-        inch.conversion_rate = 1 #Inch is master diameter unit
+        mm.conversion_rate = 1 #mm is master diameter unit
+        inch.conversion_rate = (data.inch_to_m)*1000
         ft_s.conversion_rate = data.fs_to_ms
         m_s.conversion_rate = 1 #m/s is master velocity unit
 
@@ -188,6 +189,7 @@ class SpeedPage(tk.Frame):
         frame1 = tk.Label(self, text="Rev/m (RPM)", font=controller.button_font)
         frame1.grid()
         rates_list.append(rpm) #adds at master [0] spot
+        units_list.append(rpm)
 
         #add the RPS entry and unit
         rps.frame = tk.Entry(self)
@@ -195,24 +197,27 @@ class SpeedPage(tk.Frame):
         frame1 = tk.Label(self, text="Rev/s (RPS)", font=controller.button_font)
         frame1.grid()
         rates_list.append(rps) #adds to [>0] slave spot
+        units_list.append(rps)
 
         #add a "Diameter header"
         frame1 = tk.Label(self, text="Shaft Diameter", font=controller.title_font)
         frame1.grid()
-
-        #add the inches diameter entry and unit
-        inch.frame = tk.Entry(self)
-        inch.frame.grid()
-        frame1 = tk.Label(self, text="Inch (in)", font=controller.button_font)
-        frame1.grid()
-        diameters_list.append(inch) #adds to master [0] spot
 
         #add the mm diameter entry and unit
         mm.frame = tk.Entry(self)
         mm.frame.grid()
         frame1 = tk.Label(self, text="millimeter (mm)", font=controller.button_font)
         frame1.grid()
-        diameters_list.append(mm) #adds to [>0] slave spot
+        diameters_list.append(mm) #adds to [0] master spot
+        units_list.append(mm)
+
+        #add the inches diameter entry and unit
+        inch.frame = tk.Entry(self)
+        inch.frame.grid()
+        frame1 = tk.Label(self, text="Inch (in)", font=controller.button_font)
+        frame1.grid()
+        diameters_list.append(inch) #adds to slave [>0] spot
+        units_list.append(inch)
 
         #add a "Surface Velocity header"
         frame1 = tk.Label(self, text="Surface Velocity", font=controller.title_font)
@@ -224,6 +229,7 @@ class SpeedPage(tk.Frame):
         frame1 = tk.Label(self, text="meters per second (m/s)", font=controller.button_font)
         frame1.grid()
         velocity_list.append(m_s) #adds to master [0] spot
+        units_list.append(m_s)
 
         #add the ft/s speed entry and unit
         ft_s.frame = tk.Entry(self)
@@ -231,6 +237,16 @@ class SpeedPage(tk.Frame):
         frame1 = tk.Label(self, text="feet per second (ft/s)", font=controller.button_font)
         frame1.grid() 
         velocity_list.append(ft_s) #adds to [>0] slave spot
+        units_list.append(ft_s)
+
+        #add the "clear all" button
+        clear = tk.Button(self, text="Clear", font = controller.button_font, command=lambda: calculator.clear_all(units_list))
+        clear.grid()
+
+        #add the calculate button
+        calc_button = tk.Button(self, text = "Calculate", font = controller.button_font,
+                                command = lambda: calculator.speed_read(units_list, rates_list, diameters_list, velocity_list))
+        calc_button.grid()
 
 class CurrencyPage(tk.Frame):
 

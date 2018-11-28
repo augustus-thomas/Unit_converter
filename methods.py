@@ -3,8 +3,8 @@ from decimal import *
 class Unit:
     value = 0
     conversion_rate = 0.05
-    name = "name"
-    frame = 0
+    name = "name"   #not using?
+    frame = 0       #not using?
 
     def convert(self, rate):
         value = value * conversion_rate
@@ -23,7 +23,6 @@ class Methods:
             #set precision to length of entry string
             context = Context(prec = self.find_sigfigs(units_list[0].frame.get()), rounding = ROUND_UP)
             setcontext(context)
-            ##print(self.find_sigfigs(units_list[0].frame.get()))
 
         #Search for what they did enter and get psi.value
         if units_list[0].frame.index("end") == 0:
@@ -46,7 +45,7 @@ class Methods:
             if objects.value == master_val:
                 continue
             objects.value = Decimal(units_list[0].value)/Decimal(objects.conversion_rate)
-
+        #use an exit value if this is a stage 1 calculation, not a terminal calculation
         if(exit_val == 1):
             return
 
@@ -59,6 +58,20 @@ class Methods:
             objects.frame.delete(0,'end')
             #insert the Unit().value into the Unit().entry-box
             objects.frame.insert(0, objects.value)
+
+
+    def speed_read(self, units_list, rates_list, diameters_list, velocity_list):
+        #find available info without filling any boxes
+        self.reader(rates_list, 0)
+        self.reader(diameters_list, 0)
+        self.reader(velocity_list, 0)
+
+        #do math using the master values
+        self.speedmath(rates_list[0], diameters_list[0], velocity_list[0])
+        #put the velocity_list[0].value in the box so reader() can parse
+
+
+        #convert the velocity list in case they weren't entered
 
 
     #Clears all boxes using for loop (move to methods?)
@@ -90,3 +103,16 @@ class Methods:
                 n[0] = n[0].rstrip('0')
             #pass back to the beginning to parse - we want at least 4 sig figs
         return max(self.find_sigfigs('e'.join(n)), 4)
+
+    def speed_math(rate_ob, diam_ob, speed_ob):
+        print("You made it")
+        #master values conversion rate is constant: 
+        speed_ob.value = (rate_ob * (pi) * diam_ob)/60000
+        #set precision to the number of sigfigs entered
+        #context = Context(prec = find_sigfigs(diam_ob.value), rounding = ROUND_UP)
+        #setcontext(context)
+        #put the calculated value in m/s so that reader() can parse
+        #clear the box to avoid appending an existing value
+        speed_ob.frame.delete(0,'end')
+        #insert the Unit().value into the Unit().entry-box
+        speed_ob.frame.insert(0, speed_ob.value)
