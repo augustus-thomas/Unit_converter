@@ -149,10 +149,83 @@ class SpeedPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="This is Speed", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.grid()
         button = tk.Button(self, text="Go to the start page",
                            command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+        button.grid()
+
+        #inititalize list of variables
+        units_array = list()
+
+        #initialize objects and conversion rates
+        ft_s = Unit()
+        m_s = Unit()
+        inch = Unit()
+        mm = Unit()
+        rpm  = Unit()
+        rps = Unit()
+
+        #grab conversion rates from data file]
+        rps.conversion_rate = data.rps_to_rpm
+        rpm.conversion_rate = 1 #RPM is master rotational speed unit
+        mm.conversion_rate = data.mm_to_inch
+        inch.conversion_rate = 1 #Inch is master diameter unit
+        ft_s.conversion_rate = data.fs_to_ms
+        m_s.conversion_rate = 1 #m/s is master velocity unit
+
+        #add a "Rotational speed header"
+        frame1 = tk.Label(self, text="Rotational Speed", font=controller.title_font)
+        frame1.grid()
+
+        #add the RPM entry and unit
+        rpm.frame = tk.Entry(self)
+        rpm.frame.grid()
+        frame1 = tk.Label(self, text="Rev/m (RPM)", font=controller.button_font)
+        frame1.grid()
+        units_array.append(rpm)
+
+        #add the RPS entry and unit
+        rps.frame = tk.Entry(self)
+        rps.frame.grid()
+        frame1 = tk.Label(self, text="Rev/s (RPS)", font=controller.button_font)
+        frame1.grid()
+        units_array.append(rps)
+
+        #add a "Diameter header"
+        frame1 = tk.Label(self, text="Shaft Diameter", font=controller.title_font)
+        frame1.grid()
+
+        #add the inches diameter entry and unit
+        inch.frame = tk.Entry(self)
+        inch.frame.grid()
+        frame1 = tk.Label(self, text="Inch (in)", font=controller.button_font)
+        frame1.grid()
+        units_array.append(inch)
+
+        #add the mm diameter entry and unit
+        mm.frame = tk.Entry(self)
+        mm.frame.grid()
+        frame1 = tk.Label(self, text="millimeter (mm)", font=controller.button_font)
+        frame1.grid()
+        units_array.append(mm)
+
+        #add a "Surface Velocity header"
+        frame1 = tk.Label(self, text="Surface Velocity", font=controller.title_font)
+        frame1.grid()
+
+        #add the ft/s speed entry and unit
+        ft_s.frame = tk.Entry(self)
+        ft_s.frame.grid()
+        frame1 = tk.Label(self, text="feet per second (ft/s)", font=controller.button_font)
+        frame1.grid()
+        units_array.append(ft_s)
+
+        #add the m/s diameter entry and unit
+        m_s.frame = tk.Entry(self)
+        m_s.frame.grid()
+        frame1 = tk.Label(self, text="meters per second (m/s)", font=controller.button_font)
+        frame1.grid()
+        units_array.append(m_s)
 
 class CurrencyPage(tk.Frame):
 
