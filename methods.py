@@ -1,5 +1,4 @@
 from decimal import *
-import re  
 
 class Unit:
     value = 0
@@ -14,9 +13,9 @@ class Unit:
 class Methods:
 
    #Reads the entry, performs conversion, places result in output box (move to methods?)
-    def reader(self, units_list):
+    def reader(self, units_list, exit_val):
 
-        #Grab psi.value if it is available
+        #Grab master.value if it is available
         if units_list[0].frame.index("end") != 0:
             master_val = float(units_list[0].frame.get())
             units_list[0].value = master_val
@@ -39,7 +38,7 @@ class Methods:
                     context = Context(prec = self.find_sigfigs(objects.frame.get()), rounding = ROUND_UP)
                     setcontext(context)
                     #caluclate psi from whatever was entered
-                    units_list[0].value = Decimal(master_val*objects.conversion_rate)
+                    units_list[0].value = Decimal(Decimal(master_val)*objects.conversion_rate)
                     break    
         #calculate all other unit values from psi.value
         for objects in units_list:
@@ -47,6 +46,9 @@ class Methods:
             if objects.value == master_val:
                 continue
             objects.value = Decimal(units_list[0].value)/Decimal(objects.conversion_rate)
+
+        if(exit_val == 1):
+            return
 
         #print converted values to respective boxes
         for objects in units_list:
@@ -64,7 +66,7 @@ class Methods:
         for frames in units_list:
             frames.frame.delete(0, 'end')
 
-    '''Returns the number of sig figs found in a number'''
+    #Returns the number of sig figs found in a number
     def find_sigfigs(self, num):
         #if sci-notation is used, drop to lowercase
         num = num.lower()
@@ -86,5 +88,5 @@ class Methods:
             else:
                 #the user had no trailing zeros so just strip them all
                 n[0] = n[0].rstrip('0')
-            #pass back to the beginning to parse
-        return self.find_sigfigs('e'.join(n))
+            #pass back to the beginning to parse - we want at least 4 sig figs
+        return max(self.find_sigfigs('e'.join(n)), 4)

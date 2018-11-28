@@ -127,7 +127,7 @@ class PressurePage(tk.Frame):
 
         #add the calculate button
         calc_button = tk.Button(self, text = "Calculate", font = controller.button_font,
-                                command = lambda: calculator.reader(units_array))
+                                command = lambda: calculator.reader(units_array, 0))
         calc_button.grid(row=4, column = 0)
 
         #add the "back to main menu button"
@@ -154,8 +154,13 @@ class SpeedPage(tk.Frame):
                            command=lambda: controller.show_frame("StartPage"))
         button.grid()
 
+        #instantiating a Methods class
+        calculator = Methods()
+
         #inititalize list of variables
-        units_array = list()
+        rates_list = list()
+        diameters_list = list()
+        velocity_list = list()
 
         #initialize objects and conversion rates
         ft_s = Unit()
@@ -182,14 +187,14 @@ class SpeedPage(tk.Frame):
         rpm.frame.grid()
         frame1 = tk.Label(self, text="Rev/m (RPM)", font=controller.button_font)
         frame1.grid()
-        units_array.append(rpm)
+        rates_list.append(rpm) #adds at master [0] spot
 
         #add the RPS entry and unit
         rps.frame = tk.Entry(self)
         rps.frame.grid()
         frame1 = tk.Label(self, text="Rev/s (RPS)", font=controller.button_font)
         frame1.grid()
-        units_array.append(rps)
+        rates_list.append(rps) #adds to [>0] slave spot
 
         #add a "Diameter header"
         frame1 = tk.Label(self, text="Shaft Diameter", font=controller.title_font)
@@ -200,32 +205,32 @@ class SpeedPage(tk.Frame):
         inch.frame.grid()
         frame1 = tk.Label(self, text="Inch (in)", font=controller.button_font)
         frame1.grid()
-        units_array.append(inch)
+        diameters_list.append(inch) #adds to master [0] spot
 
         #add the mm diameter entry and unit
         mm.frame = tk.Entry(self)
         mm.frame.grid()
         frame1 = tk.Label(self, text="millimeter (mm)", font=controller.button_font)
         frame1.grid()
-        units_array.append(mm)
+        diameters_list.append(mm) #adds to [>0] slave spot
 
         #add a "Surface Velocity header"
         frame1 = tk.Label(self, text="Surface Velocity", font=controller.title_font)
         frame1.grid()
-
-        #add the ft/s speed entry and unit
-        ft_s.frame = tk.Entry(self)
-        ft_s.frame.grid()
-        frame1 = tk.Label(self, text="feet per second (ft/s)", font=controller.button_font)
-        frame1.grid()
-        units_array.append(ft_s)
 
         #add the m/s diameter entry and unit
         m_s.frame = tk.Entry(self)
         m_s.frame.grid()
         frame1 = tk.Label(self, text="meters per second (m/s)", font=controller.button_font)
         frame1.grid()
-        units_array.append(m_s)
+        velocity_list.append(m_s) #adds to master [0] spot
+
+        #add the ft/s speed entry and unit
+        ft_s.frame = tk.Entry(self)
+        ft_s.frame.grid()
+        frame1 = tk.Label(self, text="feet per second (ft/s)", font=controller.button_font)
+        frame1.grid() 
+        velocity_list.append(ft_s) #adds to [>0] slave spot
 
 class CurrencyPage(tk.Frame):
 
@@ -313,7 +318,7 @@ class LengthPage(tk.Frame):
 
         #add the calculate button
         calc_button = tk.Button(self, text = "Calculate", font = controller.button_font,
-                                command = lambda: calculator.reader(units_array))
+                                command = lambda: calculator.reader(units_array, 0))
         calc_button.grid(row=8, column = 1, padx=2)
 
         #add the "clear all" button
