@@ -20,7 +20,7 @@ inch_to_m = Decimal('0.0254') #m/inch
 mile_to_m = Decimal('1609.34') #m/mile
 
 #speed units
-rps_to_rpm = Decimal(1/60) #1 rps = 1/60 rpm
+rps_to_rpm = Decimal(60) #1 rps = 1/60 rpm
 mm_to_inch = Decimal('0.0393701') #1 mm = 0.0393701 inches
 fs_to_ms = Decimal('0.3048') #1 ft/s = 0.3048 m/s
 

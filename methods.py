@@ -4,8 +4,7 @@ from math import pi
 class Unit:
     value = 0
     conversion_rate = 0.05
-    name = "name"   #not using?
-    frame = 0       #not using?
+    frame = 0
 
     def convert(self, rate):
         value = value * conversion_rate
@@ -63,7 +62,7 @@ class Methods:
             #insert the Unit().value into the Unit().entry-box
             objects.frame.insert(0, objects.value)
 
-
+    #Specialized read funcitonality for the velocity caluclator
     def speed_read(self, units_list, rates_list, diameters_list, velocity_list):
         #find available info without filling any boxes
         self.reader(rates_list, 0)
@@ -78,10 +77,19 @@ class Methods:
         #convert the velocity list in case they weren't entered
         self.reader(velocity_list, 0)
 
-    #Clears all boxes using for loop
-    def clear_all(self, units_list):
-        for frames in units_list:
-            frames.frame.delete(0, 'end')
+    #Specialized processing for the speed_read function
+    #Only calculated TOWARDS velocity, not reverse
+    def speed_math(self, rate_ob, diam_ob, speed_ob):
+        #set precision to the number of sigfigs entered
+        context = Context(prec = self.find_sigfigs(str(rate_ob.value)), rounding = ROUND_UP)
+        setcontext(context)
+        #master values conversion rate is constant: 
+        speed_ob.value = (Decimal(rate_ob.value) *Decimal(pi) * Decimal(diam_ob.value))/60000
+        #put the calculated value in m/s so that reader() can parse
+        #clear the box to avoid appending an existing value
+        speed_ob.frame.delete(0,'end')
+        #insert the Unit().value into the Unit().entry-box
+        speed_ob.frame.insert(0, speed_ob.value)
 
     #Returns the number of sig figs found in a number
     def find_sigfigs(self, num):
@@ -108,14 +116,7 @@ class Methods:
             #pass back to the beginning to parse - we want at least 4 sig figs
         return max(self.find_sigfigs('e'.join(n)), 4)
 
-    def speed_math(self, rate_ob, diam_ob, speed_ob):
-        #master values conversion rate is constant: 
-        speed_ob.value = (rate_ob.value * pi * diam_ob.value)/60000
-        #set precision to the number of sigfigs entered
-        #context = Context(prec = find_sigfigs(diam_ob.value), rounding = ROUND_UP)
-        #setcontext(context)
-        #put the calculated value in m/s so that reader() can parse
-        #clear the box to avoid appending an existing value
-        speed_ob.frame.delete(0,'end')
-        #insert the Unit().value into the Unit().entry-box
-        speed_ob.frame.insert(0, speed_ob.value)
+    #Clears all boxes using for loop
+    def clear_all(self, units_list):
+        for frames in units_list:
+            frames.frame.delete(0, 'end')

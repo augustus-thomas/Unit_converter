@@ -6,7 +6,7 @@ from methods import Methods, Unit
 
 
 
-class SampleApp(tk.Tk):
+class ESP_Calculator_app(tk.Tk):
 
     photo = "ESP_logo.png"
 
@@ -21,9 +21,6 @@ class SampleApp(tk.Tk):
         # will be raised above the others
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
-
  
         self.frames = {}
         for F in (StartPage, PressurePage, SpeedPage, CurrencyPage, LengthPage):
@@ -42,9 +39,6 @@ class SampleApp(tk.Tk):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
         frame.tkraise()
-
-
-
 
 class StartPage(tk.Frame):
 
@@ -71,7 +65,6 @@ class StartPage(tk.Frame):
         button2.pack()
         button3.pack()
         button4.pack()
-
 
 class PressurePage(tk.Frame):
 
@@ -135,24 +128,33 @@ class PressurePage(tk.Frame):
                          command=lambda: controller.show_frame("StartPage"))
         exit.grid(row=6)
 
-
-
-
-
- 
-
-
-
 class SpeedPage(tk.Frame):
 
     def __init__(self, parent, controller):
+
+        #Top Label
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is Speed", font=controller.title_font)
-        label.grid()
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.grid()
+
+        #GUI Frames
+        title_bl = tk.Frame(self)
+        title_bl.grid(row = 0, column = 0, columnspan = 3, pady=15)
+        left_bl = tk.Frame(self)
+        left_bl.grid(row = 1, column = 0, padx=30, pady=40)
+        right_bl = tk.Frame(self)
+        right_bl.grid(row = 1, column = 1)
+        results_bl = tk.Frame(self)
+        results_bl.grid(row = 2, columnspan = 3, pady=15)
+        buttons_bl = tk.Frame(self)
+        buttons_bl.grid(row = 4, columnspan = 4)
+        #add an extra frame for main buttons
+        top_buttons_bl = tk.Frame(buttons_bl)
+        top_buttons_bl.grid (row = 0, columnspan = 3, pady=10)
+
+        label = tk.Label(title_bl, text="Shaft Speed Calculator", font=controller.title_font)
+        label.grid(row = 0, sticky = 'nsew')
+
+
 
         #instantiating a Methods class
         calculator = Methods()
@@ -180,73 +182,78 @@ class SpeedPage(tk.Frame):
         m_s.conversion_rate = 1 #m/s is master velocity unit
 
         #add a "Rotational speed header"
-        frame1 = tk.Label(self, text="Rotational Speed", font=controller.title_font)
-        frame1.grid()
+        rot_header = tk.Label(left_bl, text="Rotational Speed", font=controller.title_font)
+        rot_header.grid(row = 0, column =0, columnspan = 3, sticky = 'nsew')
 
         #add the RPM entry and unit
-        rpm.frame = tk.Entry(self)
-        rpm.frame.grid()
-        frame1 = tk.Label(self, text="Rev/m (RPM)", font=controller.button_font)
-        frame1.grid()
+        rpm.frame = tk.Entry(left_bl)
+        rpm.frame.grid(row = 1, column = 0)
+        rpm_label = tk.Label(left_bl, text="Rev/m (RPM)", font=controller.button_font)
+        rpm_label.grid(row = 1, column = 1, sticky = 'w')
         rates_list.append(rpm) #adds at master [0] spot
         units_list.append(rpm)
 
         #add the RPS entry and unit
-        rps.frame = tk.Entry(self)
-        rps.frame.grid()
-        frame1 = tk.Label(self, text="Rev/s (RPS)", font=controller.button_font)
-        frame1.grid()
+        rps.frame = tk.Entry(left_bl)
+        rps.frame.grid(row = 2, column = 0)
+        rps_label = tk.Label(left_bl, text="Rev/s (RPS)", font=controller.button_font)
+        rps_label.grid(row = 2, column = 1, sticky = 'w')
         rates_list.append(rps) #adds to [>0] slave spot
         units_list.append(rps)
 
         #add a "Diameter header"
-        frame1 = tk.Label(self, text="Shaft Diameter", font=controller.title_font)
-        frame1.grid()
+        diam_header = tk.Label(right_bl, text="Shaft Diameter", font=controller.title_font)
+        diam_header.grid(row = 0, column = 0, columnspan = 3, sticky = 'nsew')
 
         #add the mm diameter entry and unit
-        mm.frame = tk.Entry(self)
-        mm.frame.grid()
-        frame1 = tk.Label(self, text="millimeter (mm)", font=controller.button_font)
-        frame1.grid()
+        mm.frame = tk.Entry(right_bl)
+        mm.frame.grid(row =1, column = 0)
+        mm_label = tk.Label(right_bl, text="millimeter (mm)", font=controller.button_font)
+        mm_label.grid(row = 1, column = 1)
         diameters_list.append(mm) #adds to [0] master spot
         units_list.append(mm)
 
         #add the inches diameter entry and unit
-        inch.frame = tk.Entry(self)
-        inch.frame.grid()
-        frame1 = tk.Label(self, text="Inch (in)", font=controller.button_font)
-        frame1.grid()
+        inch.frame = tk.Entry(right_bl)
+        inch.frame.grid(row = 2, column = 0)
+        inch_label = tk.Label(right_bl, text="Inch (in)", font=controller.button_font)
+        inch_label.grid(row = 2, column = 1)
         diameters_list.append(inch) #adds to slave [>0] spot
         units_list.append(inch)
 
         #add a "Surface Velocity header"
-        frame1 = tk.Label(self, text="Surface Velocity", font=controller.title_font)
-        frame1.grid()
+        velocity_header = tk.Label(results_bl, text="Surface Velocity", font=controller.title_font)
+        velocity_header.grid(row = 0, column = 0, columnspan = 3, sticky = 'nsew')
 
         #add the m/s diameter entry and unit
-        m_s.frame = tk.Entry(self)
-        m_s.frame.grid()
-        frame1 = tk.Label(self, text="meters per second (m/s)", font=controller.button_font)
-        frame1.grid()
+        m_s.frame = tk.Entry(results_bl)
+        m_s.frame.grid(row = 1, column = 0)
+        m_s_label = tk.Label(results_bl, text="meters per second (m/s)", font=controller.button_font)
+        m_s_label.grid(row = 1, column = 1)
         velocity_list.append(m_s) #adds to master [0] spot
         units_list.append(m_s)
 
         #add the ft/s speed entry and unit
-        ft_s.frame = tk.Entry(self)
-        ft_s.frame.grid()
-        frame1 = tk.Label(self, text="feet per second (ft/s)", font=controller.button_font)
-        frame1.grid() 
+        ft_s.frame = tk.Entry(results_bl)
+        ft_s.frame.grid(row = 2, column = 0)
+        ft_s_label = tk.Label(results_bl, text="feet per second (ft/s)", font=controller.button_font)
+        ft_s_label.grid(row = 2, column = 1) 
         velocity_list.append(ft_s) #adds to [>0] slave spot
         units_list.append(ft_s)
 
-        #add the "clear all" button
-        clear = tk.Button(self, text="Clear", font = controller.button_font, command=lambda: calculator.clear_all(units_list))
-        clear.grid()
-
         #add the calculate button
-        calc_button = tk.Button(self, text = "Calculate", font = controller.button_font,
+        calc_button = tk.Button(top_buttons_bl, text = "Calculate", font = controller.button_font,
                                 command = lambda: calculator.speed_read(units_list, rates_list, diameters_list, velocity_list))
-        calc_button.grid()
+        calc_button.grid(row = 0, column = 0, columnspan = 2, sticky = 'w', padx=5)
+
+        #add the "clear all" button
+        clear = tk.Button(top_buttons_bl, text="Clear", font = controller.button_font, command=lambda: calculator.clear_all(units_list))
+        clear.grid(row = 0, column = 2, columnspan = 2, sticky = 'e')
+
+        #return to home page
+        button = tk.Button(buttons_bl, font = controller.title_font, text="Go to the start page",
+                           command=lambda: controller.show_frame("StartPage"))
+        button.grid(row = 1, column = 0, sticky = 'nsew')
 
 class CurrencyPage(tk.Frame):
 
@@ -266,7 +273,6 @@ class LengthPage(tk.Frame):
         self.controller = controller
         label = tk.Label(self, text="Length Conversion Tool", font=controller.title_font)
         label.grid(row = 0, column = 0, columnspan = 4)
-        label.grid_columnconfigure(1, weight = 1)
 
         #instantiating a Methods class
         calculator = Methods()
@@ -347,5 +353,5 @@ class LengthPage(tk.Frame):
         exit.grid(row=10, column =1)
 
 if __name__ == "__main__":
-    app = SampleApp()
+    app = ESP_Calculator_app()
     app.mainloop()
