@@ -1,4 +1,5 @@
 from decimal import *
+from math import pi
 
 class Unit:
     value = 0
@@ -41,10 +42,13 @@ class Methods:
                     break    
         #calculate all other unit values from psi.value
         for objects in units_list:
-            #do not edit the user-entered value
-            if objects.value == master_val:
-                continue
-            objects.value = Decimal(units_list[0].value)/Decimal(objects.conversion_rate)
+            try:
+                #do not edit the user-entered value
+                if objects.value == master_val:
+                    continue
+                objects.value = Decimal(units_list[0].value)/Decimal(objects.conversion_rate)
+            except Exception:
+                return
         #use an exit value if this is a stage 1 calculation, not a terminal calculation
         if(exit_val == 1):
             return
@@ -67,14 +71,14 @@ class Methods:
         self.reader(velocity_list, 0)
 
         #do math using the master values
-        self.speedmath(rates_list[0], diameters_list[0], velocity_list[0])
+        self.speed_math(rates_list[0], diameters_list[0], velocity_list[0])
         #put the velocity_list[0].value in the box so reader() can parse
-
-
+        velocity_list[0].frame.delete(0,'end') #Delete anything in there
+        velocity_list[0].frame.insert(0, velocity_list[0].value) #input the value
         #convert the velocity list in case they weren't entered
+        self.reader(velocity_list, 0)
 
-
-    #Clears all boxes using for loop (move to methods?)
+    #Clears all boxes using for loop
     def clear_all(self, units_list):
         for frames in units_list:
             frames.frame.delete(0, 'end')
@@ -104,10 +108,9 @@ class Methods:
             #pass back to the beginning to parse - we want at least 4 sig figs
         return max(self.find_sigfigs('e'.join(n)), 4)
 
-    def speed_math(rate_ob, diam_ob, speed_ob):
-        print("You made it")
+    def speed_math(self, rate_ob, diam_ob, speed_ob):
         #master values conversion rate is constant: 
-        speed_ob.value = (rate_ob * (pi) * diam_ob)/60000
+        speed_ob.value = (rate_ob.value * pi * diam_ob.value)/60000
         #set precision to the number of sigfigs entered
         #context = Context(prec = find_sigfigs(diam_ob.value), rounding = ROUND_UP)
         #setcontext(context)
