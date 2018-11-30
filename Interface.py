@@ -266,6 +266,18 @@ class CurrencyPage(tk.Frame):
                            command=lambda: controller.show_frame("StartPage"))
         button.pack()
 
+        #make a methods object for access to functions
+        converter = Methods()
+
+        #make currency units
+        usd = Unit()
+        eur = Unit()
+
+
+        button1 = tk.Button(self, text="testcurr",
+                            command=lambda: converter.currency_convert(usd, eur),height=4, width = 20, pady=5)
+        button1.pack()
+
 class LengthPage(tk.Frame):
 
     def __init__(self, parent, controller):

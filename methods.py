@@ -1,5 +1,8 @@
 from decimal import *
 from math import pi
+import requests
+import json
+import urllib
 
 class Unit:
     value = 0
@@ -120,3 +123,15 @@ class Methods:
     def clear_all(self, units_list):
         for frames in units_list:
             frames.frame.delete(0, 'end')
+ 
+    def currency_convert(self, inCur, outCur):
+        # "convert" endpoint - convert any amount from one currency to another
+        # using real-time exchange rates
+
+        #
+        return
+
+        #? access_key = YOUR_ACCESS_KEY
+        # & from = USD
+        #& to = EUR
+        #& amount = 25

@@ -24,3 +24,4 @@ rps_to_rpm = Decimal(60) #1 rps = 1/60 rpm
 mm_to_inch = Decimal('0.0393701') #1 mm = 0.0393701 inches
 fs_to_ms = Decimal('0.3048') #1 ft/s = 0.3048 m/s
 
+#Currency api key cc827772c076885116ef450ca0df6a16
