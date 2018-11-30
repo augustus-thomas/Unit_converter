@@ -124,11 +124,29 @@ class Methods:
         for frames in units_list:
             frames.frame.delete(0, 'end')
  
-    def currency_convert(self, inCur, outCur):
+    def currency_getrates(self, currencies):
         # "convert" endpoint - convert any amount from one currency to another
         # using real-time exchange rates
 
-        #
+      
+        r = requests.get('http://data.fixer.io/api/rates'
+        + '?access_key=cc827772c076885116ef450ca0df6a16')
+        
+        for objects in currencies
+            #Only read non-empty tk.entry objects
+            if objects.frame.index("end") != 0:
+                #grab the entered value and set its objects.value to that (avoids rounding later on)
+                master_val = float(objects.frame.get())
+                objects.value = master_val
+                #set precision to the number of sigfigs entered
+                context = Context(prec = self.find_sigfigs(objects.frame.get()), rounding = ROUND_UP)
+                setcontext(context)
+       # http://data.fixer.io/api/convert
+       # ? access_key = API_KEY
+       # & from = GBP
+       # & to = JPY
+        #& amount = 25
+        
         return
 
         #? access_key = YOUR_ACCESS_KEY

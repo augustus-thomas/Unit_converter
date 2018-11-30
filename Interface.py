@@ -266,16 +266,30 @@ class CurrencyPage(tk.Frame):
                            command=lambda: controller.show_frame("StartPage"))
         button.pack()
 
+        #make a list to hold currencies active
+        active_currencies = list()
+
         #make a methods object for access to functions
         converter = Methods()
 
         #make currency units
-        usd = Unit()
-        eur = Unit()
+        
+        eur = Unit() #EURO is the master currency
+        usd = Unit() #USD
+        rmb = Unit() #Chinese Renminbi (yuan)
+
+        active_currencies.append(eur) #EUR is location zero and is master
+        active_currencies.append(usd)
+        active_currencies.append(rmb)
+
+        usd.name = 'USD'
+        eur.name = 'EUR'
+        rmb.name = 'RMB'
+
 
 
         button1 = tk.Button(self, text="testcurr",
-                            command=lambda: converter.currency_convert(usd, eur),height=4, width = 20, pady=5)
+                            command=lambda: converter.currency_getrates(active_currencies),height=4, width = 20, pady=5)
         button1.pack()
 
 class LengthPage(tk.Frame):
