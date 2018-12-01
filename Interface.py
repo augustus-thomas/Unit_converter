@@ -261,10 +261,8 @@ class CurrencyPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="This is Currency", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+        label.grid()
+
 
         #make a list to hold currencies active
         active_currencies = list()
@@ -278,8 +276,22 @@ class CurrencyPage(tk.Frame):
         usd = Unit() #USD
         rmb = Unit() #Chinese Renminbi (yuan)
 
-        active_currencies.append(eur) #EUR is location zero and is master
+        eur.frame = tk.Entry(self)
+        eur.frame.grid(row=1, column = 0)
+        frame1 = tk.Label(self, text="EUR", font=controller.button_font)
+        frame1.grid(row=2, column = 1)
+        active_currencies.append(eur) #EUR is location zero and master
+
+        usd.frame = tk.Entry(self)
+        usd.frame.grid(row=2, column = 0)
+        frame1 = tk.Label(self, text="USD", font=controller.button_font)
+        frame1.grid(row=3, column = 1)
         active_currencies.append(usd)
+
+        rmb.frame = tk.Entry(self)
+        rmb.frame.grid(row=3, column = 0)
+        frame1 = tk.Label(self, text="RMB", font=controller.button_font)
+        frame1.grid(row=4, column = 1)
         active_currencies.append(rmb)
 
         usd.name = 'USD'
@@ -290,7 +302,11 @@ class CurrencyPage(tk.Frame):
 
         button1 = tk.Button(self, text="testcurr",
                             command=lambda: converter.currency_getrates(active_currencies),height=4, width = 20, pady=5)
-        button1.pack()
+        button1.grid()
+
+        button = tk.Button(self, text="Go to the start page",
+                           command=lambda: controller.show_frame("StartPage"))
+        button.grid()
 
 class LengthPage(tk.Frame):
 
