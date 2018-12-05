@@ -4,8 +4,6 @@ from tkinter import PhotoImage
 import data
 from methods import Methods, Unit
 
-
-
 class ESP_Calculator_app(tk.Tk):
 
     photo = "ESP_logo.png"
@@ -260,9 +258,18 @@ class CurrencyPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is Currency", font=controller.title_font)
-        label.grid()
+        #add indian rupies and vientamese bat
 
+        #GUI Elements
+        title_bl = tk.Frame(self)
+        title_bl.grid(row = 0, columnspan = 2, pady=15)
+        entry_bl = tk.Frame(self)
+        entry_bl.grid(row =1, columnspan = 2, pady=15)
+        buttons_bl = tk.Frame(self)
+        buttons_bl.grid(row = 2, columnspan = 2)
+        #add an extra frame for main buttons
+        top_buttons_bl = tk.Frame(buttons_bl)
+        top_buttons_bl.grid (row = 0, columnspan = 2, pady=10)
 
         #make a list to hold currencies active
         active_currencies = list()
@@ -274,39 +281,64 @@ class CurrencyPage(tk.Frame):
         
         eur = Unit() #EURO is the master currency
         usd = Unit() #USD
-        rmb = Unit() #Chinese Renminbi (yuan)
+        cny = Unit() #Chinese Renminbi (yuan)
+        vnd = Unit() #Vietnamese dong
+        inr = Unit() #Indian Rupee
 
-        eur.frame = tk.Entry(self)
-        eur.frame.grid(row=1, column = 0)
-        frame1 = tk.Label(self, text="EUR", font=controller.button_font)
-        frame1.grid(row=2, column = 1)
+
+        eur.name = "EUR"
+        usd.name = "USD"
+        cny.name = "CNY"
+        vnd.name = "VND"
+        inr.name = "INR"
+
+        label = tk.Label(title_bl, text="Live Currency Conversion Tool", font=controller.title_font)
+        label.grid(sticky = 'nsew')
+
+        eur.frame = tk.Entry(entry_bl)
+        eur.frame.grid(row=0, column = 1)
+        frame1 = tk.Label(entry_bl, text="EUR", font=controller.button_font)
+        frame1.grid(row=0, column = 0, sticky = 'e')
         active_currencies.append(eur) #EUR is location zero and master
 
-        usd.frame = tk.Entry(self)
-        usd.frame.grid(row=2, column = 0)
-        frame1 = tk.Label(self, text="USD", font=controller.button_font)
-        frame1.grid(row=3, column = 1)
+        usd.frame = tk.Entry(entry_bl)
+        usd.frame.grid(row=1, column = 1)
+        frame1 = tk.Label(entry_bl, text="USD", font=controller.button_font)
+        frame1.grid(row=1, column = 0, sticky = 'e')
         active_currencies.append(usd)
 
-        rmb.frame = tk.Entry(self)
-        rmb.frame.grid(row=3, column = 0)
-        frame1 = tk.Label(self, text="RMB", font=controller.button_font)
-        frame1.grid(row=4, column = 1)
-        active_currencies.append(rmb)
+        cny.frame = tk.Entry(entry_bl)
+        cny.frame.grid(row=2, column = 1)
+        frame1 = tk.Label(entry_bl, text="Chinese Yuan (CNY/RMB)", font=controller.button_font)
+        frame1.grid(row=2, column = 0, sticky = 'e')
+        active_currencies.append(cny)
 
-        usd.name = 'USD'
-        eur.name = 'EUR'
-        rmb.name = 'RMB'
+        vnd.frame = tk.Entry(entry_bl)
+        vnd.frame.grid(row=3, column = 1)
+        frame1 = tk.Label(entry_bl, text="Vietnamese Dong", font=controller.button_font)
+        frame1.grid(row=3, column = 0, sticky = 'e')
+        active_currencies.append(vnd)
 
-
-
-        button1 = tk.Button(self, text="testcurr",
+        inr.frame = tk.Entry(entry_bl)
+        inr.frame.grid(row=4, column = 1)
+        frame1 = tk.Label(entry_bl, text="Indian Rupee (CNY/RMB)", font=controller.button_font)
+        frame1.grid(row=4, column = 0, sticky = 'e')
+        active_currencies.append(inr)
+        
+        #Add the "Convert" button
+        convert = tk.Button(top_buttons_bl, text = "Calculate", font = controller.button_font,
                             command=lambda: converter.currency_getrates(active_currencies),height=4, width = 20, pady=5)
-        button1.grid()
+        convert.grid(row=0, column=0)
 
-        button = tk.Button(self, text="Go to the start page",
+        #add the "clear all" button
+        clear = tk.Button(top_buttons_bl, text="Clear", font = controller.button_font,
+                          command=lambda: converter.clear_all(active_currencies),height=4, width = 20, pady=5)
+        clear.grid(row=0, column=1)
+
+        #add the "Return" button
+        return_button = tk.Button(buttons_bl, font = controller.title_font, text="Go to the start page",
                            command=lambda: controller.show_frame("StartPage"))
-        button.grid()
+        return_button.grid(row=1, columnspan = 2, sticky='nsew')
 
 class LengthPage(tk.Frame):
 
