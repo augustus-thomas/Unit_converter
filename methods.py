@@ -2,6 +2,7 @@ from decimal import *
 from math import pi
 import requests
 import json
+import os, sys
 
 class Unit:
     value = 0
@@ -14,6 +15,16 @@ class Unit:
 
 
 class Methods:
+
+    #Get absolute path to resource, works for dev and for PyInstaller
+    def resource_path(self, relative_path):
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
 
    #Reads the entry, performs conversion, places result in output box. Used for PRESSURE, CURRENCY, and LENGTH application pages
     def reader(self, units_list, exit_val):

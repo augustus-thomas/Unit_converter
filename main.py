@@ -6,7 +6,9 @@ from methods import Methods, Unit
 
 class ESP_Calculator_app(tk.Tk):
 
-    photo = "ESP_logo.png"
+    pathfinder = Methods()
+
+    photo = pathfinder.resource_path("ESP_logo.png")
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
