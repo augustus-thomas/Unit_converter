@@ -2,7 +2,6 @@ from decimal import *
 from math import pi
 import requests
 import json
-import urllib
 
 class Unit:
     value = 0
@@ -131,22 +130,39 @@ class Methods:
         # using real-time exchange rates
 
       
-        #r = requests.get('http://data.fixer.io/api/rates'
-        #+ '?access_key=cc827772c076885116ef450ca0df6a16')
-        
-        # EUR * API_val = dest_curr
-        r = {"success":True,"timestamp":1543611249,"base":"EUR","date":"2018-11-30","rates":{"AED":4.156758,"AFN":85.722462,"ALL":124.175712,"AMD":549.107895,"ANG":2.009238,"AOA":351.327257,"ARS":42.697485,"AUD":1.548938,"AWG":2.038656,"AZN":1.926628,"BAM":1.946884,"BBD":2.265833,"BDT":94.851021,"BGN":1.956503,"BHD":0.426596,"BIF":2055.064832,"BMD":1.131644,"BND":1.78351,"BOB":7.822317,"BRL":4.375897,"BSD":1.13204,"BTC":0.000284,"BTN":78.896487,"BWP":11.916658,"BYN":2.412443,"BYR":22180.215149,"BZD":2.281851,"CAD":1.504945,"CDF":1821.946654,"CHF":1.131196,"CLF":0.028345,"CLP":760.016289,"CNY":7.875154,"COP":3664.092328,"CRC":677.2831,"CUC":1.131644,"CUP":29.988556,"CVE":109.96125,"CZK":25.984014,"DJF":201.116151,"DKK":7.463337,"DOP":56.633151,"DZD":134.490233,"EGP":20.259862,"ERN":16.97506,"ETB":31.810946,"EUR":1,"FJD":2.386128,"FKP":0.882581,"GBP":0.887892,"GEL":3.027192,"GGP":0.887917,"GHS":5.621897,"GIP":0.882581,"GMD":56.010747,"GNF":10388.488926,"GTQ":8.713826,"GYD":236.655019,"HKD":8.854987,"HNL":27.595175,"HRK":7.389577,"HTG":83.438919,"HUF":323.707099,"IDR":16245.479878,"ILS":4.220017,"IMP":0.887917,"INR":78.915214,"IQD":1347.787563,"IRR":47647.855443,"ISK":139.396299,"JEP":0.887917,"JMD":143.42495,"JOD":0.803019,"JPY":128.485125,"KES":116.05049,"KGS":79.045743,"KHR":4571.840662,"KMF":489.213837,"KPW":1018.51195,"KRW":1267.441262,"KWD":0.344269,"KYD":0.943316,"KZT":422.680645,"LAK":9669.895214,"LBP":1709.857376,"LKR":202.394896,"LRD":178.917129,"LSL":15.458684,"LTL":3.34145,"LVL":0.68452,"LYD":1.578687,"MAD":10.781739,"MDL":19.403206,"MGA":4096.550333,"MKD":61.718756,"MMK":1790.883056,"MNT":2955.902457,"MOP":9.121331,"MRO":403.997167,"MUR":39.033828,"MVR":17.484322,"MWK":822.993532,"MXN":23.054754,"MYR":4.730162,"MZN":69.432039,"NAD":15.458679,"NGN":411.918671,"NIO":36.643047,"NOK":9.732706,"NPR":126.093435,"NZD":1.646723,"OMR":0.435722,"PAB":1.13204,"PEN":3.828921,"PGK":3.680275,"PHP":59.366449,"PKR":158.660628,"PLN":4.291929,"PYG":6727.399238,"QAR":4.120358,"RON":4.655813,"RSD":118.2006,"RUB":75.834952,"RWF":990.188176,"SAR":4.245818,"SBD":9.258886,"SCR":15.434531,"SDG":53.895703,"SEK":10.306988,"SGD":1.552733,"SHP":1.494792,"SLL":9449.224694,"SOS":657.485332,"SRD":8.439841,"STD":23821.776958,"SVC":9.904994,"SYP":582.796852,"SZL":15.45867,"THB":37.288076,"TJS":10.663422,"TMT":3.960753,"TND":3.306833,"TOP":2.546255,"TRY":5.912616,"TTD":7.629712,"TWD":34.906118,"TZS":2603.010792,"UAH":31.90145,"UGX":4213.679165,"USD":1.131644,"UYU":36.676985,"UZS":9385.852646,"VEF":281290.111344,"VND":26396.040329,"VUV":127.42595,"WST":2.928417,"XAF":653.004054,"XAG":0.079814,"XAU":0.000926,"XCD":3.058324,"XDR":0.819554,"XOF":658.616969,"XPF":119.105904,"YER":283.307395,"ZAR":15.693299,"ZMK":10186.154709,"ZMW":13.61032,"ZWL":364.790995}}
-        #make sure the .get worked
-        if (r["success"] == False):
-            self.clear_all(currencies)
-            for objects in currencies:
-                objects.frame.insert(0, 'Failure: No response from host')
-            return
+        request = requests.get('http://data.fixer.io/api/latest'
+            + '?access_key=cc827772c076885116ef450ca0df6a16'
+            + '&symbols=USD,EUR,CNY,VND,INR')
+
+        r = request.json()
+
+        print(r)
+
+        #request = {"success":True,"timestamp":1543611249,"base":"EUR","date":"2018-11-30","rates":{"AED":4.156758,"AFN":85.722462,"ALL":124.175712,"AMD":549.107895,"ANG":2.009238,"AOA":351.327257,"ARS":42.697485,"AUD":1.548938,"AWG":2.038656,"AZN":1.926628,"BAM":1.946884,"BBD":2.265833,"BDT":94.851021,"BGN":1.956503,"BHD":0.426596,"BIF":2055.064832,"BMD":1.131644,"BND":1.78351,"BOB":7.822317,"BRL":4.375897,"BSD":1.13204,"BTC":0.000284,"BTN":78.896487,"BWP":11.916658,"BYN":2.412443,"BYR":22180.215149,"BZD":2.281851,"CAD":1.504945,"CDF":1821.946654,"CHF":1.131196,"CLF":0.028345,"CLP":760.016289,"CNY":7.875154,"COP":3664.092328,"CRC":677.2831,"CUC":1.131644,"CUP":29.988556,"CVE":109.96125,"CZK":25.984014,"DJF":201.116151,"DKK":7.463337,"DOP":56.633151,"DZD":134.490233,"EGP":20.259862,"ERN":16.97506,"ETB":31.810946,"EUR":1,"FJD":2.386128,"FKP":0.882581,"GBP":0.887892,"GEL":3.027192,"GGP":0.887917,"GHS":5.621897,"GIP":0.882581,"GMD":56.010747,"GNF":10388.488926,"GTQ":8.713826,"GYD":236.655019,"HKD":8.854987,"HNL":27.595175,"HRK":7.389577,"HTG":83.438919,"HUF":323.707099,"IDR":16245.479878,"ILS":4.220017,"IMP":0.887917,"INR":78.915214,"IQD":1347.787563,"IRR":47647.855443,"ISK":139.396299,"JEP":0.887917,"JMD":143.42495,"JOD":0.803019,"JPY":128.485125,"KES":116.05049,"KGS":79.045743,"KHR":4571.840662,"KMF":489.213837,"KPW":1018.51195,"KRW":1267.441262,"KWD":0.344269,"KYD":0.943316,"KZT":422.680645,"LAK":9669.895214,"LBP":1709.857376,"LKR":202.394896,"LRD":178.917129,"LSL":15.458684,"LTL":3.34145,"LVL":0.68452,"LYD":1.578687,"MAD":10.781739,"MDL":19.403206,"MGA":4096.550333,"MKD":61.718756,"MMK":1790.883056,"MNT":2955.902457,"MOP":9.121331,"MRO":403.997167,"MUR":39.033828,"MVR":17.484322,"MWK":822.993532,"MXN":23.054754,"MYR":4.730162,"MZN":69.432039,"NAD":15.458679,"NGN":411.918671,"NIO":36.643047,"NOK":9.732706,"NPR":126.093435,"NZD":1.646723,"OMR":0.435722,"PAB":1.13204,"PEN":3.828921,"PGK":3.680275,"PHP":59.366449,"PKR":158.660628,"PLN":4.291929,"PYG":6727.399238,"QAR":4.120358,"RON":4.655813,"RSD":118.2006,"RUB":75.834952,"RWF":990.188176,"SAR":4.245818,"SBD":9.258886,"SCR":15.434531,"SDG":53.895703,"SEK":10.306988,"SGD":1.552733,"SHP":1.494792,"SLL":9449.224694,"SOS":657.485332,"SRD":8.439841,"STD":23821.776958,"SVC":9.904994,"SYP":582.796852,"SZL":15.45867,"THB":37.288076,"TJS":10.663422,"TMT":3.960753,"TND":3.306833,"TOP":2.546255,"TRY":5.912616,"TTD":7.629712,"TWD":34.906118,"TZS":2603.010792,"UAH":31.90145,"UGX":4213.679165,"USD":1.131644,"UYU":36.676985,"UZS":9385.852646,"VEF":281290.111344,"VND":26396.040329,"VUV":127.42595,"WST":2.928417,"XAF":653.004054,"XAG":0.079814,"XAU":0.000926,"XCD":3.058324,"XDR":0.819554,"XOF":658.616969,"XPF":119.105904,"YER":283.307395,"ZAR":15.693299,"ZMK":10186.154709,"ZMW":13.61032,"ZWL":364.790995}}
+        #Headers:  {'Server': 'nginx', 'Date': 'Thu, 06 Dec 2018 14:32:24 GMT', 'Content-Type': 'application/json; Charset=UTF-8', 'Transfer-Encoding': 'chunked', 'X-Apilayer-Transaction-Id': '54ca6243-368a-4fc5-bc20-dd9ece7b4368', 'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS', 'Etag': 'eb44cae4d34818ac26e7deae2acd9349', 'Access-Control-Allow-Origin': '*', 'X-Request-Time': '0.047'}
+
+        #Catch common API errors
+        try:
+            if (r['success'] == 'False'):
+                self.clear_all(currencies)
+                for objects in currencies:
+                    objects.frame.insert(0, "Failure: No response from host")
+                return
+        except:
+            pass
+
+        try:
+            if(r['error'] == '104'):
+                for objects in currencies:
+                    objects.frame.insert(0, "API reqs exceeded")
+                    return
+        except:
+            pass
 
         #get the conversion rates out of the dictionary
         for objects in currencies:
             if objects.name in r["rates"]:
-                objects.conversion_rate = 1/(Decimal(r["rates"].get(objects.name, 0))) #needs to be Decimal and ^-1 due to methods.reader design. default to 0 to show serious issue
+                objects.conversion_rate = 1/(Decimal(r['rates'].get(objects.name, 0))) #needs to be Decimal and ^-1 due to methods.reader design. default to 0 to show serious issue
         #now... convert
         self.reader(currencies, 0)
         return

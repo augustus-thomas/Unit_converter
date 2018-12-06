@@ -72,8 +72,20 @@ class PressurePage(tk.Frame):
         #display label
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is Pressure", font=controller.title_font)
-        label.grid(row = 0, column = 0)
+
+        #GUI Frames
+        title_bl = tk.Frame(self)
+        title_bl.grid(row = 0, column = 0, pady=15, padx = 130)
+        results_bl = tk.Frame(self)
+        results_bl.grid(row = 1, pady=15)
+        buttons_bl = tk.Frame(self)
+        buttons_bl.grid(row = 2)
+        #add an extra frame for main buttons
+        top_buttons_bl = tk.Frame(buttons_bl)
+        top_buttons_bl.grid (row = 0, pady=10)
+
+        label = tk.Label(title_bl, text="Pressure Unit Converter", font=controller.title_font)
+        label.grid(columnspan = 2)
 
         #instantiating a Methods class
         calculator = Methods()
@@ -93,39 +105,39 @@ class PressurePage(tk.Frame):
 
 
         #add the psi entry and unit
-        psi.frame = tk.Entry(self)
+        psi.frame = tk.Entry(results_bl)
         psi.frame.grid(row=1, column = 0)
-        frame1 = tk.Label(self, text="psi", font=controller.button_font)
+        frame1 = tk.Label(results_bl, text="psi", font=controller.button_font)
         frame1.grid(row=1, column = 1)
         units_array.append(psi)
 
         #add the mpa entry and unit
-        mpa.frame = tk.Entry(self)
+        mpa.frame = tk.Entry(results_bl)
         mpa.frame.grid(row=2, column = 0)
-        frame2 = tk.Label(self, text = 'MPa', font=controller.button_font)
+        frame2 = tk.Label(results_bl, text = 'MPa', font=controller.button_font)
         frame2.grid(row=2, column = 1)
         units_array.append(mpa)
 
         #add the torr entry and unit
-        torr.frame = tk.Entry(self)
+        torr.frame = tk.Entry(results_bl)
         torr.frame.grid(row=3, column = 0)
-        frame2 = tk.Label(self, text = 'Torr', font=controller.button_font)
-        frame2.grid(row=3, column = 1)
+        frame2 = tk.Label(results_bl, text = 'Torr', font=controller.button_font)
+        frame2.grid(row=3, column = 1,)
         units_array.append(torr)
 
         #add the "clear all" button
-        clear = tk.Button(self, text="Clear", font = controller.button_font, command=lambda: calculator.clear_all(units_array))
-        clear.grid(row=5, column = 0)
+        clear = tk.Button(top_buttons_bl, text="Clear", font = controller.button_font, command=lambda: calculator.clear_all(units_array))
+        clear.grid(row=0, column = 1, padx = 10)
 
         #add the calculate button
-        calc_button = tk.Button(self, text = "Calculate", font = controller.button_font,
+        calc_button = tk.Button(top_buttons_bl, text = "Calculate", font = controller.button_font,
                                 command = lambda: calculator.reader(units_array, 0))
-        calc_button.grid(row=4, column = 0)
+        calc_button.grid(row=0, column = 0)
 
         #add the "back to main menu button"
-        exit = tk.Button(self, text="Go to the main menu", font = controller.title_font, 
+        exit = tk.Button(buttons_bl, text="Main Menu", font = controller.title_font, 
                          command=lambda: controller.show_frame("StartPage"))
-        exit.grid(row=6)
+        exit.grid(row=1, columnspan = 2, sticky = 'nsew')
 
 class SpeedPage(tk.Frame):
 
@@ -171,7 +183,7 @@ class SpeedPage(tk.Frame):
         rpm  = Unit()
         rps = Unit()
 
-        #grab conversion rates from data file]
+        #grab conversion rates from data file
         rps.conversion_rate = data.rps_to_rpm
         rpm.conversion_rate = 1 #RPM is master rotational speed unit
         mm.conversion_rate = 1 #mm is master diameter unit
@@ -249,7 +261,7 @@ class SpeedPage(tk.Frame):
         clear.grid(row = 0, column = 2, columnspan = 2, sticky = 'e')
 
         #return to home page
-        button = tk.Button(buttons_bl, font = controller.title_font, text="Go to the start page",
+        button = tk.Button(buttons_bl, font = controller.title_font, text="Main Menu",
                            command=lambda: controller.show_frame("StartPage"))
         button.grid(row = 1, column = 0, sticky = 'nsew')
 
@@ -262,7 +274,7 @@ class CurrencyPage(tk.Frame):
 
         #GUI Elements
         title_bl = tk.Frame(self)
-        title_bl.grid(row = 0, columnspan = 2, pady=15)
+        title_bl.grid(row = 0, columnspan = 2, pady=15, padx = 100)
         entry_bl = tk.Frame(self)
         entry_bl.grid(row =1, columnspan = 2, pady=15)
         buttons_bl = tk.Frame(self)
@@ -296,33 +308,33 @@ class CurrencyPage(tk.Frame):
         label.grid(sticky = 'nsew')
 
         eur.frame = tk.Entry(entry_bl)
-        eur.frame.grid(row=0, column = 1)
+        eur.frame.grid(row=0, column = 0)
         frame1 = tk.Label(entry_bl, text="EUR", font=controller.button_font)
-        frame1.grid(row=0, column = 0, sticky = 'e')
+        frame1.grid(row=0, column = 1, sticky = 'w')
         active_currencies.append(eur) #EUR is location zero and master
 
         usd.frame = tk.Entry(entry_bl)
-        usd.frame.grid(row=1, column = 1)
+        usd.frame.grid(row=1, column = 0)
         frame1 = tk.Label(entry_bl, text="USD", font=controller.button_font)
-        frame1.grid(row=1, column = 0, sticky = 'e')
+        frame1.grid(row=1, column = 1, sticky = 'w')
         active_currencies.append(usd)
 
         cny.frame = tk.Entry(entry_bl)
-        cny.frame.grid(row=2, column = 1)
+        cny.frame.grid(row=2, column = 0)
         frame1 = tk.Label(entry_bl, text="Chinese Yuan (CNY/RMB)", font=controller.button_font)
-        frame1.grid(row=2, column = 0, sticky = 'e')
+        frame1.grid(row=2, column = 1, sticky = 'w')
         active_currencies.append(cny)
 
         vnd.frame = tk.Entry(entry_bl)
-        vnd.frame.grid(row=3, column = 1)
+        vnd.frame.grid(row=3, column = 0)
         frame1 = tk.Label(entry_bl, text="Vietnamese Dong", font=controller.button_font)
-        frame1.grid(row=3, column = 0, sticky = 'e')
+        frame1.grid(row=3, column = 1, sticky = 'w')
         active_currencies.append(vnd)
 
         inr.frame = tk.Entry(entry_bl)
-        inr.frame.grid(row=4, column = 1)
+        inr.frame.grid(row=4, column = 0)
         frame1 = tk.Label(entry_bl, text="Indian Rupee (CNY/RMB)", font=controller.button_font)
-        frame1.grid(row=4, column = 0, sticky = 'e')
+        frame1.grid(row=4, column = 1, sticky = 'w')
         active_currencies.append(inr)
         
         #Add the "Convert" button
@@ -333,12 +345,12 @@ class CurrencyPage(tk.Frame):
         #add the "clear all" button
         clear = tk.Button(top_buttons_bl, text="Clear", font = controller.button_font,
                           command=lambda: converter.clear_all(active_currencies),height=4, width = 20, pady=5)
-        clear.grid(row=0, column=1)
+        clear.grid(row=0, column=1, padx=10)
 
         #add the "Return" button
-        return_button = tk.Button(buttons_bl, font = controller.title_font, text="Go to the start page",
+        return_button = tk.Button(buttons_bl, font = controller.title_font, text="Main Menu",
                            command=lambda: controller.show_frame("StartPage"))
-        return_button.grid(row=1, columnspan = 2, sticky='nsew')
+        return_button.grid(row=1, columnspan = 2, sticky='nsew', pady = 10)
 
 class LengthPage(tk.Frame):
 
@@ -347,16 +359,16 @@ class LengthPage(tk.Frame):
         self.controller = controller
 
         title_frame = tk.Frame(self)
-        title_frame.grid(columnspan = 3)
+        title_frame.grid(columnspan = 3, pady = 15, padx = 130)
 
         label = tk.Label(title_frame, text="Length Conversion Tool", font=controller.title_font)
         label.grid(row = 0, pady=15, column = 1)
         #Frame for the units
         units_frame = tk.Frame(title_frame)
-        units_frame.grid(row=1, column = 1)
+        units_frame.grid(row=1, column = 1, pady = 10)
         #Frame to central justify buttons
         len_button_blk = tk.Frame(title_frame)
-        len_button_blk.grid(row = 2, column = 1)
+        len_button_blk.grid(row = 2, column = 1, pady = 10)
 
         #instantiating a Methods class
         calculator = Methods()
@@ -432,9 +444,9 @@ class LengthPage(tk.Frame):
         clear.grid(row = 0, column = 1)
 
         #add the "back to main menu button"
-        exit = tk.Button(len_button_blk, text="Go to the main menu", font = controller.title_font,
+        exit = tk.Button(len_button_blk, text="Main Menu", font = controller.title_font,
                          command=lambda: controller.show_frame("StartPage"))
-        exit.grid(row=1, column = 0, columnspan = 2)
+        exit.grid(row=1, column = 0, columnspan = 2, pady = 10)
 
 if __name__ == "__main__":
     app = ESP_Calculator_app()
