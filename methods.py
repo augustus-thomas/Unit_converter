@@ -74,10 +74,14 @@ class Methods:
             #clear the box to avoid appending an existing value
             objects.frame.delete(0,'end')
             #insert the Unit().value into the Unit().entry-box
-            objects.frame.insert(0, objects.value)
+            if(objects.value != 0):
+                objects.frame.insert(0, objects.value)
 
     #Specialized read funcitonality for the velocity caluclator
     def speed_read(self, units_list, rates_list, diameters_list, velocity_list):
+        #re-initialize all values to zero
+        for units in units_list:
+            units.value = 0
         #find available info without filling any boxes
         self.reader(rates_list, 0)
         self.reader(diameters_list, 0)
@@ -87,7 +91,8 @@ class Methods:
         self.speed_math(rates_list[0], diameters_list[0], velocity_list[0])
         #put the velocity_list[0].value in the box so reader() can parse
         velocity_list[0].frame.delete(0,'end') #Delete anything in there
-        velocity_list[0].frame.insert(0, velocity_list[0].value) #input the value
+        if(velocity_list[0].value != 0):
+            velocity_list[0].frame.insert(0, velocity_list[0].value) #input the value
         #convert the velocity list in case they weren't entered
         self.reader(velocity_list, 0)
 
@@ -103,7 +108,11 @@ class Methods:
         #clear the box to avoid appending an existing value
         speed_ob.frame.delete(0,'end')
         #insert the Unit().value into the Unit().entry-box
+        #avoid putting 0E-48 in as the result
+        if(speed_ob.value == 0):
+            return
         speed_ob.frame.insert(0, speed_ob.value)
+        return
 
     #Returns the number of sig figs found in a number
     def find_sigfigs(self, num):
