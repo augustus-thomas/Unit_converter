@@ -2,6 +2,7 @@
 # Work around mbcs bug in distutils.
 # http://bugs.python.org/issue10945
 import codecs
+
 try:
     codecs.lookup('mbcs')
 except LookupError:
