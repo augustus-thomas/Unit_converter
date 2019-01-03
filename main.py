@@ -22,7 +22,7 @@ class ESP_Calculator_app(tk.Tk):
         # will be raised above the others
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
- 
+
         self.frames = {}
         for F in (StartPage, PressurePage, SpeedPage, CurrencyPage, LengthPage):
             page_name = F.__name__
@@ -137,7 +137,7 @@ class PressurePage(tk.Frame):
         calc_button.grid(row=0, column = 0)
 
         #add the "back to main menu button"
-        exit = tk.Button(buttons_bl, text="Main Menu", font = controller.title_font, 
+        exit = tk.Button(buttons_bl, text="Main Menu", font = controller.title_font,
                          command=lambda: controller.show_frame("StartPage"))
         exit.grid(row=1, columnspan = 2, sticky = 'nsew')
 
@@ -249,7 +249,7 @@ class SpeedPage(tk.Frame):
         ft_s.frame = tk.Entry(results_bl)
         ft_s.frame.grid(row = 2, column = 0)
         ft_s_label = tk.Label(results_bl, text="feet per second (ft/s)", font=controller.button_font)
-        ft_s_label.grid(row = 2, column = 1) 
+        ft_s_label.grid(row = 2, column = 1)
         velocity_list.append(ft_s) #adds to [>0] slave spot
         units_list.append(ft_s)
 
@@ -292,7 +292,7 @@ class CurrencyPage(tk.Frame):
         converter = Methods()
 
         #make currency units
-        
+
         eur = Unit() #EURO is the master currency
         usd = Unit() #USD
         cny = Unit() #Chinese Renminbi (yuan)
@@ -335,10 +335,10 @@ class CurrencyPage(tk.Frame):
 
         inr.frame = tk.Entry(entry_bl)
         inr.frame.grid(row=4, column = 0)
-        frame1 = tk.Label(entry_bl, text="Indian Rupee (CNY/RMB)", font=controller.button_font)
+        frame1 = tk.Label(entry_bl, text="Indian Rupee", font=controller.button_font)
         frame1.grid(row=4, column = 1, sticky = 'w')
         active_currencies.append(inr)
-        
+
         #Add the "Convert" button
         convert = tk.Button(top_buttons_bl, text = "Calculate", font = controller.button_font,
                             command=lambda: converter.currency_getrates(active_currencies),height=4, width = 20, pady=5)
@@ -396,44 +396,44 @@ class LengthPage(tk.Frame):
 
         #add the meter entry and unit
         meter.frame = tk.Entry(units_frame)
-        meter.frame.grid(row=0, columnspan = 2)
+        meter.frame.grid(row=0, columnspan = 2, column = 1)
         frame1 = tk.Label(units_frame, text="meter", font=controller.button_font)
-        frame1.grid(row=0, column = 2)
+        frame1.grid(row=0, column = 0, padx = 5)
         units_array.append(meter)
 
         #add the inch entry and unit
         inch.frame = tk.Entry(units_frame)
-        inch.frame.grid(row=1, columnspan = 2)
+        inch.frame.grid(row=0, columnspan = 2, column = 3, padx=5)
         frame1 = tk.Label(units_frame, text="inch", font=controller.button_font)
-        frame1.grid(row=1, column = 2)
+        frame1.grid(row=0, column = 5)
         units_array.append(inch)
 
         #add the millimeter entry and unit
         mm.frame = tk.Entry(units_frame)
-        mm.frame.grid(row=2, columnspan = 2)
+        mm.frame.grid(row=2, columnspan = 2, column = 1)
         frame1 = tk.Label(units_frame, text="mm", font=controller.button_font)
-        frame1.grid(row=2, column = 2)
+        frame1.grid(row=2, column = 0, padx=5)
         units_array.append(mm)
 
         #add the centimeter entry and unit
         cm.frame = tk.Entry(units_frame)
-        cm.frame.grid(row=3, columnspan = 2)
+        cm.frame.grid(row=1, columnspan = 2, column =1)
         frame1 = tk.Label(units_frame, text="cm", font=controller.button_font)
-        frame1.grid(row=3, column = 2)
+        frame1.grid(row=1, column = 0, padx = 5)
         units_array.append(cm)
 
         #add the thousandth entry and unit
         thou.frame = tk.Entry(units_frame)
-        thou.frame.grid(row=4, columnspan = 2)
+        thou.frame.grid(row=1, columnspan = 2, column = 3, padx=5)
         frame1 = tk.Label(units_frame, text="thou", font=controller.button_font)
-        frame1.grid(row=4, column = 2)
+        frame1.grid(row=1, column = 5)
         units_array.append(thou)
-        
+
         #add the mile entry and unit
         mile.frame = tk.Entry(units_frame)
-        mile.frame.grid(row=5, columnspan = 2)
+        mile.frame.grid(row=2, columnspan = 2, column = 3, padx=5)
         frame1 = tk.Label(units_frame, text="mile", font=controller.button_font)
-        frame1.grid(row=5, column = 2)
+        frame1.grid(row=2, column = 5)
         units_array.append(mile)
 
         #add the calculate button
