@@ -52,7 +52,7 @@ class Methods:
                     setcontext(context)
                     #caluclate psi from whatever was entered
                     units_list[0].value = Decimal(Decimal(master_val)*objects.conversion_rate)
-                    break    
+                    break
         #calculate all other unit values from psi.value
         for objects in units_list:
             try:
@@ -79,40 +79,87 @@ class Methods:
 
     #Specialized read funcitonality for the velocity caluclator
     def speed_read(self, units_list, rates_list, diameters_list, velocity_list):
-        #re-initialize all values to zero
-        for units in units_list:
-            units.value = 0
+
+        #Find master values and execute appropriate calculation
+        self.speed_math(rates_list, diameters_list, velocity_list)
         #find available info without filling any boxes
         self.reader(rates_list, 0)
         self.reader(diameters_list, 0)
         self.reader(velocity_list, 0)
 
-        #do math using the master values
-        self.speed_math(rates_list[0], diameters_list[0], velocity_list[0])
-        #put the velocity_list[0].value in the box so reader() can parse
-        velocity_list[0].frame.delete(0,'end') #Delete anything in there
-        if(velocity_list[0].value != 0):
-            velocity_list[0].frame.insert(0, velocity_list[0].value) #input the value
-        #convert the velocity list in case they weren't entered
-        self.reader(velocity_list, 0)
 
     #Specialized processing for the speed_read function
     #Only calculated TOWARDS velocity, not reverse
     def speed_math(self, rate_ob, diam_ob, speed_ob):
+        print(rate_ob[0].value)
+        if rate_ob[0].value != 0:
+            rate_frame = 0
+        else:
+            rate_frame = 1
+        if diam_ob[0].value != 0:
+            diam_frame = 0
+        else:
+            diam_val = diam_ob[1].value
+            diam_frame = 1
+        if speed_ob[0].value != 0:
+            speed_frame = 0
+        else:
+            speed_frame = 1
+
+        print(rate_frame, " ", diam_frame, " ", speed_frame)
+        rate_present = False
+        diam_present = False
+        speed_present = False
+
         #set precision to the number of sigfigs entered
-        context = Context(prec = self.find_sigfigs(str(rate_ob.value)), rounding = ROUND_UP)
-        setcontext(context)
-        #master values conversion rate is constant: 
-        speed_ob.value = (Decimal(rate_ob.value) *Decimal(pi) * Decimal(diam_ob.value))/60000
-        #put the calculated value in m/s so that reader() can parse
-        #clear the box to avoid appending an existing value
-        speed_ob.frame.delete(0,'end')
-        #insert the Unit().value into the Unit().entry-box
-        #avoid putting 0E-48 in as the result
-        if(speed_ob.value == 0):
+        #Also see which values are present
+#        if rate_ob[rate_frame].value != 0:
+    #        rate_present = True
+#            context = Context(prec = self.find_sigfigs(str(rate_ob[rate_frame].value)), rounding = ROUND_UP)
+    #        setcontext(context)
+#        if diam_ob[diam_frame].value !=0:
+    #        diam_present = True
+#            context = Context(prec = self.find_sigfigs(str(diam_ob[diam_frame].value)), rounding = ROUND_UP)
+#            setcontext(context)
+#        if speed_ob[speed_frame].value !=0:
+#            speed_present = True
+#            context = Context(prec = self.find_sigfigs(str(speed_ob[speed_frame].value)), rounding = ROUND_UP)
+#            setcontext(context)
+
+        #Case: Rate and Diameter Given (default)
+        if rate_present and diam_present:
+            #put the calculated value in m/s so that reader() can parse later
+            #clear the box to avoid appending an existing value
+            speed_ob[speed_frame].frame.delete(0,'end')
+            speed_ob[speed_frame].value = (Decimal(rate_ob[rate_frame].value) * Decimal(pi) * Decimal(diam_ob[diam_frame].value))/60000
+            #insert the Unit().value into the Unit().entry-box
+            #avoid putting 0E-48 in as the result
+            if(speed_ob[speed_frame].value == 0):
+                speed_ob[speed_frame].frame.insert(0, "0")
+                return
+            speed_ob[speed_frame].frame.insert(0, speed_ob[speed_frame].value)
             return
-        speed_ob.frame.insert(0, speed_ob.value)
-        return
+
+        #Case: Rate and Speed Given
+        if rate_present and speed_present:
+            diam_ob[diam_frame].frame.delete(0,'end')
+            diam_ob[diam_frame].value = (60000 * Decimal(speed_val))/(Decimal(pi)*Decimal(rate_ob.value))
+            if(diam_ob[diam_frame].value == 0):
+                diam_ob[diam_frame].frame.insert(0, "0")
+                return
+            diam_ob[diam_frame].frame.insert(0, diam_ob[diam_frame].value)
+            return
+        #Case: Diameter and Speed Given
+        if diam_present and speed_present:
+            rate_ob[rate_frame].frame.delete(0,'end')
+            rate_ob[rate_frame].value = (60000 * Decimal(speed_ob[speed_frame].value))/(Decimal(pi)*Decimal(diam_ob[diam_frame].value))
+            if(rate_ob[rate_frame].value == 0):
+                rate_ob[rate_frame].frame.insert(0, "0")
+                return
+            rate_ob[rate_frame].frame.insert(0, rate_ob[rate_frame].value)
+            #DO A READER HERE OF JUST THIS BUNCH
+            return
+
 
     #Returns the number of sig figs found in a number
     def find_sigfigs(self, num):
@@ -143,13 +190,13 @@ class Methods:
     def clear_all(self, units_list):
         for frames in units_list:
             frames.frame.delete(0, 'end')
- 
+
     #Gets rates from API and then passes the object list to Methods.reader() for entry
     def currency_getrates(self, currencies):
         # "convert" endpoint - convert any amount from one currency to another
         # using real-time exchange rates
 
-      
+
         request = requests.get('http://data.fixer.io/api/latest'
             + '?access_key=cc827772c076885116ef450ca0df6a16'
             + '&symbols=USD,EUR,CNY,VND,INR')
