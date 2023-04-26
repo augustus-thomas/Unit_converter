@@ -1,5 +1,11 @@
 #This file is for storing static conversion rates and possibly APIs if I go the currency route
 from decimal import *
+import os
+from dotenv import load_dotenv
+
+#Fetch CURRENCY_API_KEY stored in secret ./env/.env that is ignored
+load_dotenv()
+CURRENCY_API_KEY = os.getenv('CURRENCY_API_KEY')
 
 #set precision to length of entry string
 context = Context(prec = 10)
